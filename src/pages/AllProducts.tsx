@@ -44,6 +44,8 @@ const AllProducts = () => {
         // Import initial products if none saved
         import('@/data').then(({ products: initialProducts }) => {
           setProducts(initialProducts);
+          // Save to localStorage for future use
+          localStorage.setItem('ak-products', JSON.stringify(initialProducts));
         });
       }
     };
