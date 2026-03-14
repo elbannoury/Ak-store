@@ -44,9 +44,18 @@ const ProductDetail = () => {
 
   // Load product and all products
   useEffect(() => {
-    const loadProduct = () => {
+    const loadProduct = async () => {
+      let products: Product[] = [];
       const savedProducts = localStorage.getItem('ak-products');
-      const products = savedProducts ? JSON.parse(savedProducts) : [];
+      
+      if (savedProducts) {
+        products = JSON.parse(savedProducts);
+      } else {
+        const { products: initialProducts } = await import('@/data');
+        products = initialProducts;
+        localStorage.setItem('ak-products', JSON.stringify(products));
+      }
+      
       setAllProducts(products);
       
       const foundProduct = products.find((p: Product) => p.id === id);
