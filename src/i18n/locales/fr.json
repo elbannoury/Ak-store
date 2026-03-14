@@ -1,0 +1,258 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "shop": "Boutique",
+    "about": "À Propos",
+    "contact": "Contact",
+    "cart": "Panier",
+    "products": "Produits"
+  },
+  "hero": {
+    "title": "AK KIDS",
+    "subtitle": "La Destination Mode Enfant Préférée du Maroc",
+    "description": "Découvrez des vêtements tendance, confortables et abordables pour vos petits. Des tenues ludiques aux essentiels cozy, nous avons tout pour garder vos enfants stylés et heureux !",
+    "ctaPrimary": "Voir la Collection",
+    "ctaSecondary": "Explorer Plus",
+    "newCollection": "Nouvelle Collection",
+    "happyKids": "Enfants Heureux",
+    "products": "Produits",
+    "rating": "Note"
+  },
+  "about": {
+    "title": "Conçu pour Jouer, Fait pour les Souvenirs",
+    "description": "Chez AK Kids, nous croyons que chaque enfant mérite de look et de se sentir au mieux. Nos vêtements sont fabriqués avec amour, utilisant des tissus doux et des coutures durables qui suivent chaque aventure.",
+    "features": {
+      "quality": "Tissus de Qualité Premium",
+      "design": "Designs Tendance",
+      "comfort": "Confort Toute la Journée"
+    },
+    "cta": "Lire Notre Histoire",
+    "badge": "À Propos d'AK Kids",
+    "years": "Ans d'Excellence"
+  },
+  "categories": {
+    "title": "Acheter par Catégorie",
+    "subtitle": "Trouvez le style parfait pour vos petits",
+    "baby": "Bébé",
+    "boys": "Garçons",
+    "girls": "Filles",
+    "accessories": "Accessoires",
+    "shopNow": "Acheter",
+    "browseCollection": "Parcourir la Collection",
+    "viewAll": "Voir Tous les Produits",
+    "items": "articles"
+  },
+  "products": {
+    "title": "Meilleures Ventes",
+    "subtitle": "Nos pièces préférées des parents et des enfants",
+    "addToCart": "Ajouter au Panier",
+    "quickView": "Aperçu Rapide",
+    "viewDetails": "Voir les Détails",
+    "sale": "Promo",
+    "new": "Nouveau",
+    "outOfStock": "Rupture de Stock",
+    "allProducts": "Tous les Produits",
+    "search": "Rechercher des produits...",
+    "filter": "Filtrer",
+    "sortBy": "Trier Par",
+    "newest": "Plus Récent",
+    "priceAsc": "Prix: Croissant",
+    "priceDesc": "Prix: Décroissant",
+    "rating": "Mieux Notés",
+    "showing": "Affichage",
+    "of": "sur",
+    "noResults": "Aucun produit trouvé",
+    "clearFilters": "Effacer les Filtres",
+    "categories": "Catégories",
+    "priceRange": "Gamme de Prix",
+    "freeShipping": "Livraison gratuite sur les commandes de plus de 500 MAD !",
+    "youMayAlsoLike": "Vous Aimerez Aussi",
+    "relatedProducts": "Produits Similaires",
+    "recentlyViewed": "Récemment Consultés"
+  },
+  "productDetail": {
+    "availableSizes": "Tailles Disponibles",
+    "color": "Couleur",
+    "size": "Taille",
+    "quantity": "Quantité",
+    "description": "Description",
+    "addToCart": "Ajouter au Panier",
+    "buyNow": "Acheter Maintenant",
+    "orderWhatsApp": "Commander via WhatsApp",
+    "freeDelivery": "Livraison Gratuite",
+    "securePayment": "Paiement Sécurisé",
+    "easyReturns": "Retours Faciles",
+    "sizeGuide": "Guide des Tailles",
+    "inStock": "En Stock",
+    "outOfStock": "Rupture de Stock",
+    "sku": "Référence",
+    "reviews": "Avis",
+    "writeReview": "Écrire un Avis",
+    "addToWishlist": "Ajouter aux Favoris",
+    "removeFromWishlist": "Retirer des Favoris"
+  },
+  "features": {
+    "title": "Pourquoi les Parents Nous Aiment",
+    "quality": {
+      "title": "Qualité Premium",
+      "description": "Tissus doux, sûrs et durables"
+    },
+    "delivery": {
+      "title": "Livraison Rapide",
+      "description": "Expédition rapide partout au Maroc"
+    },
+    "returns": {
+      "title": "Retours Faciles",
+      "description": "Politique de retour sans tracas de 30 jours"
+    },
+    "support": {
+      "title": "Support 24/7",
+      "description": "Toujours là pour vous aider"
+    }
+  },
+  "testimonials": {
+    "title": "Parents Heureux, Enfants Heureux",
+    "subtitle": "Ce que nos clients disent de nous"
+  },
+  "cta": {
+    "title": "Prêt à Mettre à Jour Leur Garde-Robe ?",
+    "description": "Rejoignez des milliers de parents heureux et donnez à vos enfants le style qu'ils méritent",
+    "button": "Acheter Maintenant"
+  },
+  "footer": {
+    "newsletter": {
+      "title": "Restez Informé",
+      "description": "Abonnez-vous pour recevoir des offres spéciales et des mises à jour",
+      "placeholder": "Entrez votre email",
+      "button": "S'abonner",
+      "success": "Merci pour votre abonnement !"
+    },
+    "links": {
+      "shop": "Boutique",
+      "about": "À Propos",
+      "contact": "Contact",
+      "faq": "FAQ",
+      "shipping": "Info Livraison",
+      "returns": "Politique de Retour"
+    },
+    "contact": {
+      "title": "Contactez-Nous",
+      "phone": "+212 5XX-XXXXXX",
+      "email": "hello@akkids.ma",
+      "address": "Casablanca, Maroc"
+    },
+    "social": {
+      "title": "Suivez-Nous"
+    },
+    "copyright": "© 2024 AK Kids. Tous droits réservés. Fait avec ❤️ au Maroc"
+  },
+  "cart": {
+    "title": "Panier d'Achat",
+    "empty": "Votre panier est vide",
+    "continueShopping": "Continuer les Achats",
+    "subtotal": "Sous-total",
+    "shipping": "Livraison",
+    "total": "Total",
+    "checkout": "Commander",
+    "remove": "Retirer",
+    "quantity": "Quantité",
+    "orderWhatsApp": "Commander via WhatsApp"
+  },
+  "checkout": {
+    "title": "Commander",
+    "deliveryInfo": "Informations de Livraison",
+    "orderSummary": "Résumé de la Commande",
+    "fullName": "Nom Complet",
+    "phone": "Numéro de Téléphone",
+    "email": "Email (Optionnel)",
+    "address": "Adresse de Livraison",
+    "city": "Ville",
+    "notes": "Notes de Commande (Optionnel)",
+    "placeOrder": "Passer la Commande",
+    "processing": "Traitement...",
+    "cashOnDelivery": "Paiement à la Livraison / WhatsApp",
+    "payOnReceive": "Payez lors de la réception de votre commande",
+    "secureOrder": "Commande Sécurisée",
+    "fastDelivery": "Livraison Rapide",
+    "support": "Support 24/7",
+    "orderSuccess": "Commande Passée !",
+    "thankYou": "Merci pour votre commande. Nous vous contacterons bientôt pour confirmation.",
+    "orderId": "N° de Commande",
+    "freeShipping": "Livraison gratuite sur les commandes de plus de 500 MAD !",
+    "required": "Obligatoire"
+  },
+  "wishlist": {
+    "title": "Mes Favoris",
+    "empty": "Votre liste de favoris est vide",
+    "addToCart": "Ajouter au Panier",
+    "remove": "Retirer",
+    "moveToCart": "Déplacer vers le Panier"
+  },
+  "sizeGuide": {
+    "title": "Guide des Tailles",
+    "age": "Âge",
+    "height": "Taille (cm)",
+    "weight": "Poids (kg)",
+    "chest": "Poitrine (cm)",
+    "waist": "Taille (cm)",
+    "howToMeasure": "Comment Mesurer",
+    "measureDesc": "Pour de meilleurs résultats, mesurez votre enfant debout. Utilisez un ruban souple et gardez-le ajusté mais pas trop serré."
+  },
+  "admin": {
+    "title": "Panneau d'Administration",
+    "login": "Connexion Admin",
+    "password": "Mot de Passe",
+    "loginButton": "Connexion",
+    "logout": "Déconnexion",
+    "products": "Produits",
+    "orders": "Commandes",
+    "addProduct": "Ajouter un Produit",
+    "editProduct": "Modifier le Produit",
+    "deleteProduct": "Supprimer le Produit",
+    "productName": "Nom du Produit",
+    "price": "Prix",
+    "category": "Catégorie",
+    "stock": "Stock",
+    "actions": "Actions",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "uploadImage": "Télécharger une Image",
+    "images": "Images",
+    "description": "Description",
+    "sizes": "Tailles",
+    "colors": "Couleurs",
+    "sku": "Référence",
+    "inStock": "En Stock",
+    "outOfStock": "Rupture de Stock",
+    "isNew": "Nouveau Produit",
+    "isSale": "En Promotion",
+    "originalPrice": "Prix Original",
+    "salePrice": "Prix Promo"
+  },
+  "language": {
+    "title": "Langue",
+    "en": "English",
+    "fr": "Français",
+    "ar": "العربية"
+  },
+  "common": {
+    "loading": "Chargement...",
+    "error": "Une erreur s'est produite",
+    "success": "Succès !",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "add": "Ajouter",
+    "close": "Fermer",
+    "back": "Retour",
+    "next": "Suivant",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "sort": "Trier",
+    "viewAll": "Voir Tout",
+    "seeMore": "Voir Plus",
+    "showLess": "Voir Moins",
+    "readMore": "Lire Plus"
+  }
+}

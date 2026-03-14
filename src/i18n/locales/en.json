@@ -1,0 +1,258 @@
+{
+  "nav": {
+    "home": "Home",
+    "shop": "Shop",
+    "about": "About",
+    "contact": "Contact",
+    "cart": "Cart",
+    "products": "Products"
+  },
+  "hero": {
+    "title": "AK KIDS",
+    "subtitle": "Morocco's Favorite Kids Fashion Destination",
+    "description": "Discover trendy, comfortable, and affordable clothing for your little ones. From playful outfits to cozy essentials, we've got everything to keep your kids stylish and happy!",
+    "ctaPrimary": "Shop Collection",
+    "ctaSecondary": "Explore More",
+    "newCollection": "New Collection",
+    "happyKids": "Happy Kids",
+    "products": "Products",
+    "rating": "Rating"
+  },
+  "about": {
+    "title": "Designed for Play, Made for Memories",
+    "description": "At AK Kids, we believe every child deserves to look and feel their best. Our clothes are crafted with love, using soft fabrics and durable stitches that keep up with every adventure—from playground fun to family gatherings.",
+    "features": {
+      "quality": "Premium Quality Fabrics",
+      "design": "Trendy Designs",
+      "comfort": "All-Day Comfort"
+    },
+    "cta": "Read Our Story",
+    "badge": "About AK Kids",
+    "years": "Years of Excellence"
+  },
+  "categories": {
+    "title": "Shop by Category",
+    "subtitle": "Find the perfect style for your little ones",
+    "baby": "Baby",
+    "boys": "Boys",
+    "girls": "Girls",
+    "accessories": "Accessories",
+    "shopNow": "Shop Now",
+    "browseCollection": "Browse Collection",
+    "viewAll": "View All Products",
+    "items": "items"
+  },
+  "products": {
+    "title": "Best Sellers",
+    "subtitle": "Our most loved pieces by parents and kids",
+    "addToCart": "Add to Cart",
+    "quickView": "Quick View",
+    "viewDetails": "View Details",
+    "sale": "Sale",
+    "new": "New",
+    "outOfStock": "Out of Stock",
+    "allProducts": "All Products",
+    "search": "Search products...",
+    "filter": "Filter",
+    "sortBy": "Sort By",
+    "newest": "Newest First",
+    "priceAsc": "Price: Low to High",
+    "priceDesc": "Price: High to Low",
+    "rating": "Highest Rated",
+    "showing": "Showing",
+    "of": "of",
+    "noResults": "No products found",
+    "clearFilters": "Clear Filters",
+    "categories": "Categories",
+    "priceRange": "Price Range",
+    "freeShipping": "Free shipping on orders over 500 MAD!",
+    "youMayAlsoLike": "You May Also Like",
+    "relatedProducts": "Related Products",
+    "recentlyViewed": "Recently Viewed"
+  },
+  "productDetail": {
+    "availableSizes": "Available Sizes",
+    "color": "Color",
+    "size": "Size",
+    "quantity": "Quantity",
+    "description": "Description",
+    "addToCart": "Add to Cart",
+    "buyNow": "Buy Now",
+    "orderWhatsApp": "Order via WhatsApp",
+    "freeDelivery": "Free Delivery",
+    "securePayment": "Secure Payment",
+    "easyReturns": "Easy Returns",
+    "sizeGuide": "Size Guide",
+    "inStock": "In Stock",
+    "outOfStock": "Out of Stock",
+    "sku": "SKU",
+    "reviews": "Reviews",
+    "writeReview": "Write a Review",
+    "addToWishlist": "Add to Wishlist",
+    "removeFromWishlist": "Remove from Wishlist"
+  },
+  "features": {
+    "title": "Why Parents Love Us",
+    "quality": {
+      "title": "Premium Quality",
+      "description": "Soft, safe, and durable fabrics that last"
+    },
+    "delivery": {
+      "title": "Fast Delivery",
+      "description": "Quick shipping all over Morocco"
+    },
+    "returns": {
+      "title": "Easy Returns",
+      "description": "30-day hassle-free return policy"
+    },
+    "support": {
+      "title": "24/7 Support",
+      "description": "Always here to help you"
+    }
+  },
+  "testimonials": {
+    "title": "Happy Parents, Happy Kids",
+    "subtitle": "What our customers say about us"
+  },
+  "cta": {
+    "title": "Ready to Upgrade Their Wardrobe?",
+    "description": "Join thousands of happy parents and give your kids the style they deserve",
+    "button": "Shop Now"
+  },
+  "footer": {
+    "newsletter": {
+      "title": "Stay Updated",
+      "description": "Subscribe to get special offers and updates",
+      "placeholder": "Enter your email",
+      "button": "Subscribe",
+      "success": "Thank you for subscribing!"
+    },
+    "links": {
+      "shop": "Shop",
+      "about": "About Us",
+      "contact": "Contact",
+      "faq": "FAQ",
+      "shipping": "Shipping Info",
+      "returns": "Returns Policy"
+    },
+    "contact": {
+      "title": "Contact Us",
+      "phone": "+212 5XX-XXXXXX",
+      "email": "hello@akkids.ma",
+      "address": "Casablanca, Morocco"
+    },
+    "social": {
+      "title": "Follow Us"
+    },
+    "copyright": "© 2024 AK Kids. All rights reserved. Made with ❤️ in Morocco"
+  },
+  "cart": {
+    "title": "Shopping Cart",
+    "empty": "Your cart is empty",
+    "continueShopping": "Continue Shopping",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "total": "Total",
+    "checkout": "Checkout",
+    "remove": "Remove",
+    "quantity": "Quantity",
+    "orderWhatsApp": "Order via WhatsApp"
+  },
+  "checkout": {
+    "title": "Checkout",
+    "deliveryInfo": "Delivery Information",
+    "orderSummary": "Order Summary",
+    "fullName": "Full Name",
+    "phone": "Phone Number",
+    "email": "Email (Optional)",
+    "address": "Delivery Address",
+    "city": "City",
+    "notes": "Order Notes (Optional)",
+    "placeOrder": "Place Order",
+    "processing": "Processing...",
+    "cashOnDelivery": "Cash on Delivery / WhatsApp",
+    "payOnReceive": "Pay when you receive your order",
+    "secureOrder": "Secure Order",
+    "fastDelivery": "Fast Delivery",
+    "support": "24/7 Support",
+    "orderSuccess": "Order Placed!",
+    "thankYou": "Thank you for your order. We'll contact you soon to confirm.",
+    "orderId": "Order ID",
+    "freeShipping": "Free shipping on orders over 500 MAD!",
+    "required": "Required"
+  },
+  "wishlist": {
+    "title": "My Wishlist",
+    "empty": "Your wishlist is empty",
+    "addToCart": "Add to Cart",
+    "remove": "Remove",
+    "moveToCart": "Move to Cart"
+  },
+  "sizeGuide": {
+    "title": "Size Guide",
+    "age": "Age",
+    "height": "Height (cm)",
+    "weight": "Weight (kg)",
+    "chest": "Chest (cm)",
+    "waist": "Waist (cm)",
+    "howToMeasure": "How to Measure",
+    "measureDesc": "For best results, measure your child while they are standing. Use a soft measuring tape and keep it snug but not tight."
+  },
+  "admin": {
+    "title": "Admin Panel",
+    "login": "Admin Login",
+    "password": "Password",
+    "loginButton": "Login",
+    "logout": "Logout",
+    "products": "Products",
+    "orders": "Orders",
+    "addProduct": "Add Product",
+    "editProduct": "Edit Product",
+    "deleteProduct": "Delete Product",
+    "productName": "Product Name",
+    "price": "Price",
+    "category": "Category",
+    "stock": "Stock",
+    "actions": "Actions",
+    "save": "Save",
+    "cancel": "Cancel",
+    "uploadImage": "Upload Image",
+    "images": "Images",
+    "description": "Description",
+    "sizes": "Sizes",
+    "colors": "Colors",
+    "sku": "SKU",
+    "inStock": "In Stock",
+    "outOfStock": "Out of Stock",
+    "isNew": "New Product",
+    "isSale": "On Sale",
+    "originalPrice": "Original Price",
+    "salePrice": "Sale Price"
+  },
+  "language": {
+    "title": "Language",
+    "en": "English",
+    "fr": "Français",
+    "ar": "العربية"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "success": "Success!",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "close": "Close",
+    "back": "Back",
+    "next": "Next",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "viewAll": "View All",
+    "seeMore": "See More",
+    "showLess": "Show Less",
+    "readMore": "Read More"
+  }
+}
