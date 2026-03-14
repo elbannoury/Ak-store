@@ -6,7 +6,10 @@ import AdminPanel from '@/pages/AdminPanel';
 import Checkout from '@/pages/Checkout';
 import ProductDetail from '@/pages/ProductDetail';
 import { Toaster } from '@/components/ui/sonner';
-import './index.css'; // تأكد من وجود هذا الملف أو قم بإزالة هذا السطر إذا كنت تستخدم Tailwind فقط
+import '@/i18n'; // مهم جداً لتفعيل الترجمة العربية والإنجليزية
+
+// ملاحظة: إذا لم يكن لديك ملف index.css في مجلد src، قم بحذف السطر التالي
+// import './index.css'; 
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
