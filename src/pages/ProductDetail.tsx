@@ -1,294 +1,251 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { 
-  ArrowLeft, 
-  ShoppingCart, 
-  Star, 
-  Heart, 
-  Share2, 
-  Truck,
-  Shield,
-  RefreshCw,
-  Minus,
-  Plus,
-  MessageCircle,
-  Ruler
-} from 'lucide-react';
-import { useCartStore } from '@/store/cartStore';
-import { whatsappService } from '@/services/whatsappService';
+import { ArrowLeft, Star, Minus, Plus, ShoppingCart, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
 import { toast } from 'sonner';
-import type { Product } from '@/types';
 
-const ProductDetail = () => {
+// نوع بيانات المنتج
+interface Product {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  originalPrice?: number;
+  images: string[];
+  category: string;
+  sku?: string;
+  rating?: number;
+  isSale?: boolean;
+  isNew?: boolean;
+  colors?: string[];
+  sizes?: string[];
+  stock?: number;
+}
+
+export default function ProductDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const { addItem, items } = useCartStore();
   
   const [product, setProduct] = useState<Product | null>(null);
-  const [allProducts, setAllProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState(0);
-  const [selectedSize, setSelectedSize] = useState<string>('');
-  const [selectedColor, setSelectedColor] = useState<string>('');
+  const [selectedColor, setSelectedColor] = useState('');
+  const [selectedSize, setSelectedSize] = useState('');
   const [quantity, setQuantity] = useState(1);
-  const [isWishlisted, setIsWishlisted] = useState(false);
-  const [showSizeGuide, setShowSizeGuide] = useState(false);
 
-  // Load product and all products
+  // جلب بيانات المنتج
   useEffect(() => {
-    const loadProduct = async () => {
-      let products: Product[] = [];
-      const savedProducts = localStorage.getItem('ak-products');
-      
-      if (savedProducts) {
-        products = JSON.parse(savedProducts);
-      } else {
-        const { products: initialProducts } = await import('@/data');
-        products = initialProducts;
-        localStorage.setItem('ak-products', JSON.stringify(products));
+    const fetchProduct = async () => {
+      try {
+        setLoading(true);
+        // هنا يمكنك استبدال هذا بطلب API حقيقي
+        // const response = await fetch(`/api/products/${id}`);
+        // const data = await response.json();
+        
+        // مثال مؤقت (استبدله ببياناتك الحقيقية):
+        const mockProduct: Product = {
+          id: id || '1',
+          name: 'منتج تجريبي',
+          description: 'وصف المنتج التجريبي',
+          price: 299,
+          originalPrice: 399,
+          images: ['/placeholder-1.jpg', '/placeholder-2.jpg'],
+          category: 'electronics',
+          sku: 'SKU-001',
+          rating: 4.5,
+          isSale: true,
+          isNew: true,
+          colors: ['أسود', 'أبيض', 'أزرق'],
+          sizes: ['S', 'M', 'L', 'XL'],
+          stock: 10
+        };
+        
+        setProduct(mockProduct);
+        if (mockProduct.colors?.length) {
+          setSelectedColor(mockProduct.colors[0]);
+        }
+        if (mockProduct.sizes?.length) {
+          setSelectedSize(mockProduct.sizes[0]);
+        }
+      } catch (error) {
+        toast.error(t('errors.fetchProduct'));
+        console.error('Error fetching product:', error);
+      } finally {
+        setLoading(false);
       }
-      
-      setAllProducts(products);
-      
-      const foundProduct = products.find((p: Product) => p.id === id);
-      if (foundProduct) {
-        setProduct(foundProduct);
-        setSelectedSize(foundProduct.sizes?.[0] || '');
-        setSelectedColor(foundProduct.colors?.[0] || '');
-      }
     };
 
-    loadProduct();
+    if (id) {
+      fetchProduct();
+    }
+  }, [id, t]);
 
-    // Listen for product updates
-    const handleProductsUpdated = () => {
-      loadProduct();
-    };
-    window.addEventListener('productsUpdated', handleProductsUpdated);
+  // إضافة إلى السلة
+  const handleAddToCart = () => {
+    if (!product) return;
+    
+    // منطق إضافة إلى السلة هنا
+    toast.success(t('cart.added', { name: product.name }));
+  };
 
-    return () => {
-      window.removeEventListener('productsUpdated', handleProductsUpdated);
-    };
-  }, [id]);
+  // الطلب عبر واتساب
+  const handleWhatsAppOrder = () => {
+    if (!product) return;
+    
+    const message = `مرحباً، أريد طلب المنتج: ${product.name} (الكمية: ${quantity})`;
+    const whatsappUrl = `https://wa.me/YOUR_PHONE_NUMBER?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  };
 
-  const isInCart = items.some((item) => item.id === id);
-
-  if (!product) {
+  if (loading) {
     return (
-      <div className="min-h-screen bg-[#fff9ed] flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold text-[#211e0f] mb-4">{t('common.error')}</h1>
-          <p className="text-gray-500 mb-6">Product not found</p>
-          <Button onClick={() => navigate('/products')} className="btn-primary">
-            {t('cart.continueShopping')}
-          </Button>
-        </div>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
     );
   }
 
-  const handleAddToCart = () => {
-    addItem({
-      id: product.id,
-      name: `${product.name}${selectedSize ? ` (${selectedSize})` : ''}${selectedColor ? ` - ${selectedColor}` : ''}`,
-      price: product.price,
-      image: product.image,
-      category: product.category,
-      size: selectedSize,
-    });
-    toast.success(`${product.name} ${t('products.addToCart')}`);
-  };
-
-  const handleBuyNow = () => {
-    handleAddToCart();
-    navigate('/checkout');
-  };
-
-  const handleWhatsAppOrder = () => {
-    whatsappService.quickOrder(
-      [{ ...product, quantity, category: product.category }],
-      product.price * quantity
+  if (!product) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center gap-4">
+        <h2 className="text-2xl font-bold">{t('productDetail.notFound')}</h2>
+        <Button onClick={() => navigate('/')}>
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          {t('common.backToHome')}
+        </Button>
+      </div>
     );
-  };
-
-  const handleShare = async () => {
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: product.name,
-          text: `Check out ${product.name} on AK Kids!`,
-          url: window.location.href,
-        });
-      } catch (error) {
-        console.log('Share cancelled');
-      }
-    } else {
-      navigator.clipboard.writeText(window.location.href);
-      toast.success('Link copied to clipboard!');
-    }
-  };
-
-  const relatedProducts = allProducts
-    .filter((p) => p.category === product.category && p.id !== product.id)
-    .slice(0, 4);
+  }
 
   return (
-    <div className="min-h-screen bg-[#fff9ed]">
-      {/* Navigation Bar */}
-      <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-lg shadow-sm">
-        <div className="w-full section-padding py-4">
-          <div className="flex items-center justify-between">
-            <button
-              onClick={() => navigate(-1)}
-              className="flex items-center gap-2 text-[#211e0f] hover:text-[#f58a1f] transition-colors"
-            >
-              <ArrowLeft className="w-5 h-5" />
-              <span className="font-semibold">{t('common.back')}</span>
-            </button>
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => setIsWishlisted(!isWishlisted)}
-                className={`p-3 rounded-full transition-colors ${
-                  isWishlisted ? 'bg-red-100 text-red-500' : 'bg-gray-100 hover:bg-gray-200'
-                }`}
-              >
-                <Heart className={`w-5 h-5 ${isWishlisted ? 'fill-current' : ''}`} />
-              </button>
-              <button
-                onClick={handleShare}
-                className="p-3 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
-              >
-                <Share2 className="w-5 h-5" />
-              </button>
-            </div>
-          </div>
-        </div>
-      </nav>
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-8">
+        {/* زر الرجوع */}
+        <Button variant="ghost" onClick={() => navigate(-1)} className="mb-6">
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          {t('common.back')}
+        </Button>
 
-      <div className="w-full section-padding py-8">
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
-          {/* Image Gallery */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+          {/* قسم الصور */}
           <div className="space-y-4">
-            {/* Main Image */}
-            <div className="relative aspect-square bg-white rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg">
+            {/* الصورة الرئيسية */}
+            <div className="relative aspect-square bg-muted rounded-lg overflow-hidden">
               <img
-                src={product.images?.[selectedImage] || product.image}
+                src={product.images[selectedImage]}
                 alt={product.name}
                 className="w-full h-full object-cover"
               />
               {product.isSale && (
-                <span className="absolute top-4 left-4 px-4 py-2 bg-[#f87171] text-white font-bold rounded-full">
+                <Badge className="absolute top-4 left-4 bg-red-500">
                   {t('products.sale')}
-                </span>
+                </Badge>
               )}
               {product.isNew && (
-                <span className="absolute top-4 left-4 px-4 py-2 bg-[#4ade80] text-white font-bold rounded-full">
+                <Badge className="absolute top-4 right-4 bg-green-500">
                   {t('products.new')}
-                </span>
+                </Badge>
               )}
             </div>
 
-            {/* Thumbnail Gallery */}
-            {(product.images?.length || 0) > 1 && (
-              <div className="flex gap-2 sm:gap-3 overflow-x-auto pb-2">
-                {product.images?.map((image, index) => (
+            {/* معرض الصور المصغرة */}
+            {product.images.length > 1 && (
+              <div className="flex gap-2 overflow-x-auto">
+                {product.images.map((image, index) => (
                   <button
                     key={index}
                     onClick={() => setSelectedImage(index)}
-                    className={`flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden border-2 transition-all ${
-                      selectedImage === index
-                        ? 'border-[#f6b638] ring-2 ring-[#f6b638]/30'
-                        : 'border-transparent hover:border-gray-300'
+                    className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 ${
+                      selectedImage === index ? 'border-primary' : 'border-transparent'
                     }`}
                   >
-                    <img
-                      src={image}
-                      alt={`${product.name} - ${index + 1}`}
-                      className="w-full h-full object-cover"
-                    />
+                    <img src={image} alt="" className="w-full h-full object-cover" />
                   </button>
                 ))}
               </div>
             )}
           </div>
 
-          {/* Product Info */}
-          <div className="space-y-4 sm:space-y-6">
-            {/* Header */}
+          {/* قسم التفاصيل */}
+          <div className="space-y-6">
+            {/* العنوان والتصنيف */}
             <div>
-              <div className="flex items-center gap-2 mb-2">
-                <span className="px-3 py-1 bg-[#f6b638]/20 text-[#f58a1f] text-sm font-semibold rounded-full capitalize">
-                  {t(`categories.${product.category}`)}
-                </span>
-                {product.sku && (
-                  <span className="text-sm text-gray-500">{t('productDetail.sku')}: {product.sku}</span>
-                )}
-              </div>
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#211e0f] mb-2" style={{ fontFamily: 'Rowdies, cursive' }}>
-                {product.name}
-              </h1>
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-1">
+              <Badge variant="secondary" className="mb-2">
+                {t(`categories.${product.category}`)}
+              </Badge>
+              {product.sku && (
+                <p className="text-sm text-muted-foreground mb-2">
+                  {t('productDetail.sku')}: {product.sku}
+                </p>
+              )}
+              <h1 className="text-3xl font-bold">{product.name}</h1>
+              
+              {/* التقييم */}
+              <div className="flex items-center gap-2 mt-2">
+                <div className="flex">
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
-                      className={`w-4 h-4 sm:w-5 sm:h-5 ${
+                      className={`h-5 w-5 ${
                         i < (product.rating || 5)
-                          ? 'text-[#f6b638] fill-[#f6b638]'
+                          ? 'fill-yellow-400 text-yellow-400'
                           : 'text-gray-300'
                       }`}
                     />
                   ))}
                 </div>
-                <span className="text-gray-500">({product.rating || 5}.0)</span>
+                <span className="text-sm text-muted-foreground">
+                  ({product.rating || 5}.0)
+                </span>
               </div>
             </div>
 
-            {/* Price */}
-            <div className="flex items-center gap-4 flex-wrap">
-              <span className="text-3xl sm:text-4xl font-bold text-[#f58a1f]">
+            {/* السعر */}
+            <div className="flex items-baseline gap-3">
+              <span className="text-3xl font-bold text-primary">
                 {product.price} MAD
               </span>
               {product.originalPrice && (
-                <span className="text-xl sm:text-2xl text-gray-400 line-through">
-                  {product.originalPrice} MAD
-                </span>
-              )}
-              {product.originalPrice && (
-                <span className="px-3 py-1 bg-green-100 text-green-600 font-semibold rounded-full text-sm">
-                  {t('products.sale')} {product.originalPrice - product.price} MAD
-                </span>
+                <>
+                  <span className="text-xl text-muted-foreground line-through">
+                    {product.originalPrice} MAD
+                  </span>
+                  <Badge variant="destructive">
+                    {t('products.sale')} {product.originalPrice - product.price} MAD
+                  </Badge>
+                </>
               )}
             </div>
 
-            {/* Description */}
-            <p className="text-gray-600 leading-relaxed text-sm sm:text-base">
-              {product.description}
-            </p>
+            <Separator />
 
-            {/* Color Selection */}
+            {/* الوصف */}
+            <div>
+              <h3 className="font-semibold mb-2">{t('productDetail.description')}</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                {product.description}
+              </p>
+            </div>
+
+            {/* اختيار اللون */}
             {product.colors && product.colors.length > 0 && (
               <div>
-                <label className="block font-semibold text-[#211e0f] mb-3">
-                  {t('productDetail.color')}: <span className="text-gray-500">{selectedColor}</span>
-                </label>
-                <div className="flex gap-2 sm:gap-3 flex-wrap">
+                <h3 className="font-semibold mb-3">
+                  {t('productDetail.color')}: {selectedColor}
+                </h3>
+                <div className="flex gap-2 flex-wrap">
                   {product.colors.map((color) => (
                     <button
                       key={color}
                       onClick={() => setSelectedColor(color)}
-                      className={`px-3 sm:px-4 py-2 rounded-xl border-2 text-sm transition-all ${
+                      className={`px-4 py-2 rounded-lg border-2 transition-colors ${
                         selectedColor === color
-                          ? 'border-[#f6b638] bg-[#f6b638]/10'
-                          : 'border-gray-200 hover:border-gray-300'
+                          ? 'border-primary bg-primary/10'
+                          : 'border-border hover:border-primary/50'
                       }`}
                     >
                       {color}
@@ -298,30 +255,21 @@ const ProductDetail = () => {
               </div>
             )}
 
-            {/* Size Selection */}
+            {/* اختيار المقاس */}
             {product.sizes && product.sizes.length > 0 && (
               <div>
-                <div className="flex items-center justify-between mb-3">
-                  <label className="block font-semibold text-[#211e0f]">
-                    {t('productDetail.size')}: <span className="text-gray-500">{selectedSize}</span>
-                  </label>
-                  <button
-                    onClick={() => setShowSizeGuide(true)}
-                    className="text-sm text-[#f58a1f] hover:underline flex items-center gap-1"
-                  >
-                    <Ruler className="w-4 h-4" />
-                    {t('productDetail.sizeGuide')}
-                  </button>
-                </div>
-                <div className="flex gap-2 sm:gap-3 flex-wrap">
+                <h3 className="font-semibold mb-3">
+                  {t('productDetail.size')}: {selectedSize}
+                </h3>
+                <div className="flex gap-2 flex-wrap">
                   {product.sizes.map((size) => (
                     <button
                       key={size}
                       onClick={() => setSelectedSize(size)}
-                      className={`w-12 h-12 sm:w-14 sm:h-14 rounded-xl border-2 font-semibold text-sm transition-all ${
+                      className={`w-12 h-12 rounded-lg border-2 transition-colors ${
                         selectedSize === size
-                          ? 'border-[#f6b638] bg-[#f6b638] text-[#211e0f]'
-                          : 'border-gray-200 hover:border-gray-300'
+                          ? 'border-primary bg-primary/10'
+                          : 'border-border hover:border-primary/50'
                       }`}
                     >
                       {size}
@@ -331,189 +279,61 @@ const ProductDetail = () => {
               </div>
             )}
 
-            {/* Quantity */}
+            {/* الكمية */}
             <div>
-              <label className="block font-semibold text-[#211e0f] mb-3">
-                {t('productDetail.quantity')}
-              </label>
-              <div className="flex items-center gap-4">
-                <button
+              <h3 className="font-semibold mb-3">{t('productDetail.quantity')}</h3>
+              <div className="flex items-center gap-3">
+                <Button
+                  variant="outline"
+                  size="icon"
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
+                  disabled={quantity <= 1}
                 >
-                  <Minus className="w-5 h-5" />
-                </button>
-                <span className="text-xl sm:text-2xl font-bold w-10 sm:w-12 text-center">{quantity}</span>
-                <button
+                  <Minus className="h-4 w-4" />
+                </Button>
+                <span className="text-xl font-semibold w-12 text-center">{quantity}</span>
+                <Button
+                  variant="outline"
+                  size="icon"
                   onClick={() => setQuantity(quantity + 1)}
-                  className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
                 >
-                  <Plus className="w-5 h-5" />
-                </button>
+                  <Plus className="h-4 w-4" />
+                </Button>
               </div>
             </div>
 
-            {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-              <Button
-                onClick={handleAddToCart}
-                className="flex-1 btn-primary py-4 sm:py-6 text-base sm:text-lg flex items-center justify-center gap-2"
-              >
-                <ShoppingCart className="w-5 h-5" />
-                {isInCart ? t('cart.added') : t('products.addToCart')}
+            {/* أزرار الإجراء */}
+            <div className="flex flex-col sm:flex-row gap-3 pt-4">
+              <Button size="lg" className="flex-1" onClick={handleAddToCart}>
+                <ShoppingCart className="mr-2 h-5 w-5" />
+                {t('productDetail.addToCart')}
               </Button>
               <Button
-                onClick={handleBuyNow}
-                className="flex-1 bg-[#211e0f] hover:bg-[#f58a1f] text-white font-bold py-4 sm:py-6 text-base sm:text-lg rounded-full transition-all"
+                size="lg"
+                variant="outline"
+                className="flex-1 bg-green-600 hover:bg-green-700 text-white border-green-600"
+                onClick={handleWhatsAppOrder}
               >
-                {t('productDetail.buyNow')}
+                <MessageCircle className="mr-2 h-5 w-5" />
+                {t('productDetail.whatsappOrder')}
               </Button>
             </div>
 
-            {/* WhatsApp Order */}
-            <Button
-              onClick={handleWhatsAppOrder}
-              variant="outline"
-              className="w-full border-green-500 text-green-600 hover:bg-green-50 py-3 sm:py-4 text-base flex items-center justify-center gap-2"
-            >
-              <MessageCircle className="w-5 h-5" />
-              {t('productDetail.orderWhatsApp')}
-            </Button>
-
-            {/* Features */}
-            <div className="grid grid-cols-3 gap-2 sm:gap-4 pt-4 sm:pt-6 border-t">
-              <div className="text-center">
-                <Truck className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-1 sm:mb-2 text-[#f6b638]" />
-                <p className="text-xs sm:text-sm text-gray-600">{t('productDetail.freeDelivery')}</p>
+            {/* المميزات */}
+            <div className="grid grid-cols-3 gap-4 pt-6 text-center text-sm">
+              <div className="p-4 bg-muted rounded-lg">
+                <p className="font-medium">{t('productDetail.freeDelivery')}</p>
               </div>
-              <div className="text-center">
-                <Shield className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-1 sm:mb-2 text-[#f6b638]" />
-                <p className="text-xs sm:text-sm text-gray-600">{t('productDetail.securePayment')}</p>
+              <div className="p-4 bg-muted rounded-lg">
+                <p className="font-medium">{t('productDetail.securePayment')}</p>
               </div>
-              <div className="text-center">
-                <RefreshCw className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-1 sm:mb-2 text-[#f6b638]" />
-                <p className="text-xs sm:text-sm text-gray-600">{t('productDetail.easyReturns')}</p>
+              <div className="p-4 bg-muted rounded-lg">
+                <p className="font-medium">{t('productDetail.easyReturns')}</p>
               </div>
             </div>
           </div>
         </div>
-
-        {/* Related Products */}
-        {relatedProducts.length > 0 && (
-          <div className="mt-12 sm:mt-16">
-            <h2 className="text-xl sm:text-2xl font-bold text-[#211e0f] mb-6 sm:mb-8" style={{ fontFamily: 'Rowdies, cursive' }}>
-              {t('products.youMayAlsoLike')}
-            </h2>
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-              {relatedProducts.map((related) => (
-                <div
-                  key={related.id}
-                  onClick={() => navigate(`/product/${related.id}`)}
-                  className="cursor-pointer group"
-                >
-                  <div className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-shadow">
-                    <div className="aspect-square overflow-hidden">
-                      <img
-                        src={related.image}
-                        alt={related.name}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform"
-                      />
-                    </div>
-                    <div className="p-3 sm:p-4">
-                      <h3 className="font-semibold text-[#211e0f] group-hover:text-[#f58a1f] transition-colors text-sm sm:text-base line-clamp-1">
-                        {related.name}
-                      </h3>
-                      <p className="text-[#f58a1f] font-bold text-sm sm:text-base">{related.price} MAD</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
-
-      {/* Size Guide Modal */}
-      <Dialog open={showSizeGuide} onOpenChange={setShowSizeGuide}>
-        <DialogContent className="sm:max-w-[600px] bg-[#fff9ed]">
-          <DialogHeader>
-            <DialogTitle style={{ fontFamily: 'Rowdies, cursive' }}>
-              {t('sizeGuide.title')}
-            </DialogTitle>
-          </DialogHeader>
-          <div className="space-y-6">
-            {/* Size Chart */}
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-[#f6b638]/20">
-                  <tr>
-                    <th className="px-4 py-3 text-left font-semibold">{t('sizeGuide.age')}</th>
-                    <th className="px-4 py-3 text-left font-semibold">{t('sizeGuide.height')}</th>
-                    <th className="px-4 py-3 text-left font-semibold">{t('sizeGuide.weight')}</th>
-                    <th className="px-4 py-3 text-left font-semibold">{t('sizeGuide.chest')}</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-100">
-                  <tr>
-                    <td className="px-4 py-3">0-3M</td>
-                    <td className="px-4 py-3">50-56</td>
-                    <td className="px-4 py-3">3-5</td>
-                    <td className="px-4 py-3">38-42</td>
-                  </tr>
-                  <tr>
-                    <td className="px-4 py-3">3-6M</td>
-                    <td className="px-4 py-3">56-68</td>
-                    <td className="px-4 py-3">5-7</td>
-                    <td className="px-4 py-3">42-46</td>
-                  </tr>
-                  <tr>
-                    <td className="px-4 py-3">6-12M</td>
-                    <td className="px-4 py-3">68-80</td>
-                    <td className="px-4 py-3">7-10</td>
-                    <td className="px-4 py-3">46-50</td>
-                  </tr>
-                  <tr>
-                    <td className="px-4 py-3">1-2Y</td>
-                    <td className="px-4 py-3">80-92</td>
-                    <td className="px-4 py-3">10-13</td>
-                    <td className="px-4 py-3">50-54</td>
-                  </tr>
-                  <tr>
-                    <td className="px-4 py-3">2-3Y</td>
-                    <td className="px-4 py-3">92-98</td>
-                    <td className="px-4 py-3">13-15</td>
-                    <td className="px-4 py-3">54-56</td>
-                  </tr>
-                  <tr>
-                    <td className="px-4 py-3">4-5Y</td>
-                    <td className="px-4 py-3">104-110</td>
-                    <td className="px-4 py-3">16-19</td>
-                    <td className="px-4 py-3">58-60</td>
-                  </tr>
-                  <tr>
-                    <td className="px-4 py-3">6-7Y</td>
-                    <td className="px-4 py-3">116-122</td>
-                    <td className="px-4 py-3">20-24</td>
-                    <td className="px-4 py-3">62-64</td>
-                  </tr>
-                  <tr>
-                    <td className="px-4 py-3">8-9Y</td>
-                    <td className="px-4 py-3">128-134</td>
-                    <td className="px-4 py-3">25-30</td>
-                    <td className="px-4 py-3">66-68</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div className="bg-[#f6b638]/10 rounded-xl p-4">
-              <h4 className="font-semibold mb-2">{t('sizeGuide.howToMeasure')}</h4>
-              <p className="text-sm text-gray-600">{t('sizeGuide.measureDesc')}</p>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
     </div>
   );
-};
-
-export default ProductDetail;
+}
