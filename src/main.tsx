@@ -1,8 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import Home from './pages/home';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+
+// استدعاء الصفحة الرئيسية (تأكد أن اسم الملف في مجلد pages يبدأ بحرف H كبير)
 import Home from '@/pages/Home';
+
 import AllProducts from '@/pages/AllProducts';
 import AdminPanel from '@/pages/AdminPanel';
 import Checkout from '@/pages/Checkout';
