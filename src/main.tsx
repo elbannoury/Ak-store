@@ -1,26 +1,32 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Home from '@/pages/Home';
 import AllProducts from '@/pages/AllProducts';
 import AdminPanel from '@/pages/AdminPanel';
 import Checkout from '@/pages/Checkout';
 import ProductDetail from '@/pages/ProductDetail';
 import { Toaster } from '@/components/ui/sonner';
-import '@/i18n'; // تفعيل اللغات
-import './index.css'; // تفعيل التصميم (تأكد من إنشاء الملف في الخطوة السابقة)
+import '@/i18n';
+import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <BrowserRouter>
+      <Toaster />
       <Routes>
+        {/* الصفحة الرئيسية كمسار افتراضي */}
         <Route path="/" element={<Home />} />
+        
+        {/* المسارات الأخرى */}
         <Route path="/products" element={<AllProducts />} />
+        <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/admin" element={<AdminPanel />} />
         <Route path="/checkout" element={<Checkout />} />
-        <Route path="/product/:id" element={<ProductDetail />} />
+        
+        {/* توجيه أي مسار غير معروف إلى الصفحة الرئيسية */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-      <Toaster />
     </BrowserRouter>
-  </React.StrictMode>,
+  </React.StrictMode>
 );
