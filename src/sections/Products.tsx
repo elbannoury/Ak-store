@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { 
   ShoppingCart, 
-  Star
+  Star, 
   Eye, 
   ArrowRight 
 } from 'lucide-react';
