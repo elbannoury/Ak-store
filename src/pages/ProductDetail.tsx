@@ -136,23 +136,23 @@ export default function ProductDetail() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen bg-[#fff9ed]">
+      <div className="section-padding py-8 md:py-12 max-w-7xl mx-auto">
         {/* زر الرجوع */}
         <Button variant="ghost" onClick={() => navigate(-1)} className="mb-6">
           <ArrowLeft className="mr-2 h-4 w-4" />
           {t('common.back')}
         </Button>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 lg:gap-12">
           {/* قسم الصور */}
-          <div className="space-y-4">
+          <div className="space-y-3 md:space-y-4">
             {/* الصورة الرئيسية */}
-            <div className="relative aspect-square bg-muted rounded-lg overflow-hidden">
+            <div className="relative aspect-square bg-white rounded-2xl md:rounded-3xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300">
               <img
                 src={product.images[selectedImage]}
                 alt={product.name}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
               />
               {product.isSale && (
                 <Badge className="absolute top-4 left-4 bg-red-500">
@@ -168,13 +168,13 @@ export default function ProductDetail() {
 
             {/* معرض الصور المصغرة */}
             {product.images.length > 1 && (
-              <div className="flex gap-2 overflow-x-auto">
+              <div className="flex gap-2 md:gap-3 overflow-x-auto pb-2 md:pb-3">
                 {product.images.map((image, index) => (
                   <button
                     key={index}
                     onClick={() => setSelectedImage(index)}
-                    className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 ${
-                      selectedImage === index ? 'border-primary' : 'border-transparent'
+                    className={`flex-shrink-0 w-16 h-16 md:w-20 md:h-20 rounded-lg md:rounded-xl overflow-hidden border-2 md:border-3 transition-all duration-300 hover:scale-105 ${
+                      selectedImage === index ? 'border-[#f6b638] shadow-md' : 'border-gray-200 hover:border-[#f6b638]/50'
                     }`}
                   >
                     <img src={image} alt="" className="w-full h-full object-cover" />
@@ -196,7 +196,7 @@ export default function ProductDetail() {
                   {t('productDetail.sku')}: {product.sku}
                 </p>
               )}
-              <h1 className="text-3xl font-bold">{product.name}</h1>
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#211e0f]">{product.name}</h1>
               
               {/* التقييم */}
               <div className="flex items-center gap-2 mt-2">
@@ -219,16 +219,16 @@ export default function ProductDetail() {
             </div>
 
             {/* السعر */}
-            <div className="flex items-baseline gap-3">
-              <span className="text-3xl font-bold text-primary">
+            <div className="flex flex-wrap items-baseline gap-2 md:gap-3">
+              <span className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#f58a1f]">
                 {product.price} MAD
               </span>
               {product.originalPrice && (
                 <>
-                  <span className="text-xl text-muted-foreground line-through">
+                  <span className="text-lg sm:text-xl text-muted-foreground line-through">
                     {product.originalPrice} MAD
                   </span>
-                  <Badge variant="destructive">
+                  <Badge variant="destructive" className="text-xs sm:text-sm">
                     {t('products.sale')} {product.originalPrice - product.price} MAD
                   </Badge>
                 </>
