@@ -1,63 +1,57 @@
-export interface Product {
-  id: string;
-  name: string;
-  price: number;
-  originalPrice?: number;
-  image: string;
-  images: string[];
-  category: 'baby' | 'boys' | 'girls' | 'accessories';
-  sizes?: string[];
-  colors?: string[];
-  description?: string;
-  isNew?: boolean;
-  isSale?: boolean;
-  rating?: number;
-  inStock?: boolean;
-  sku?: string;
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+import LanguageDetector from 'i18next-browser-languagedetector';
+
+import en from './locales/en.json';
+import fr from './locales/fr.json';
+import ar from './locales/ar.json';
+
+i18n
+  .use(LanguageDetector)
+  .use(initReactI18next)
+  .init({
+    resources: {
+      en: { translation: en },
+      fr: { translation: fr },
+      ar: { translation: ar },
+    },
+    fallbackLng: 'en',
+    debug: false,
+    interpolation: {
+      escapeValue: false,
+    },
+    detection: {
+      order: ['localStorage', 'navigator'],
+      caches: ['localStorage'],
+    },
+  });
+
+// Handle RTL/LTR direction changes
+i18n.on('languageChanged', (lng) => {
+  const htmlElement = document.documentElement;
+  if (lng === 'ar') {
+    htmlElement.setAttribute('dir', 'rtl');
+    htmlElement.setAttribute('lang', 'ar');
+    document.body.style.direction = 'rtl';
+  } else {
+    htmlElement.setAttribute('dir', 'ltr');
+    htmlElement.setAttribute('lang', lng);
+    document.body.style.direction = 'ltr';
+  }
+  // Store language preference
+  localStorage.setItem('i18nextLng', lng);
+});
+
+// Set initial direction on load
+const initialLng = i18n.language || 'en';
+if (initialLng === 'ar') {
+  document.documentElement.setAttribute('dir', 'rtl');
+  document.documentElement.setAttribute('lang', 'ar');
+  document.body.style.direction = 'rtl';
+} else {
+  document.documentElement.setAttribute('dir', 'ltr');
+  document.documentElement.setAttribute('lang', initialLng);
+  document.body.style.direction = 'ltr';
 }
 
-export interface Category {
-  id: string;
-  name: string;
-  image: string;
-  itemCount: number;
-}
-
-export interface Testimonial {
-  id: string;
-  name: string;
-  avatar: string;
-  rating: number;
-  text: string;
-  location: string;
-}
-
-export interface Feature {
-  id: string;
-  title: string;
-  description: string;
-  icon: string;
-}
-
-export interface OrderItem {
-  productId: string;
-  name: string;
-  price: number;
-  quantity: number;
-  size?: string;
-  color?: string;
-}
-
-export interface Order {
-  id: string;
-  customerName: string;
-  phone: string;
-  email?: string;
-  address: string;
-  city: string;
-  items: OrderItem[];
-  total: number;
-  status: 'pending' | 'confirmed' | 'shipped' | 'delivered' | 'cancelled';
-  createdAt: string;
-  notes?: string;
-}
+export default i18n;
