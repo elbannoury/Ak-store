@@ -38,10 +38,10 @@ const Navigation = () => {
   };
 
   const navLinks = [
-    { href: '#home', label: t('nav.home') },
-    { href: '#shop', label: t('nav.shop') },
-    { href: '#about', label: t('nav.about') },
-    { href: '#contact', label: t('nav.contact') },
+    { href: '/', label: t('nav.home'), isAnchor: false },
+    { href: '/#shop', label: t('nav.shop'), isAnchor: true },
+    { href: '/#about', label: t('nav.about'), isAnchor: true },
+    { href: '/#contact', label: t('nav.contact'), isAnchor: true },
   ];
 
   const languages = [
@@ -82,18 +82,43 @@ const Navigation = () => {
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center gap-8">
             {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="relative text-[#211e0f] font-semibold text-lg hover:text-[#f58a1f] 
-                         transition-colors duration-300 group"
-              >
-                {link.label}
-                <span
-                  className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#f6b638] 
-                           transition-all duration-300 group-hover:w-full"
-                />
-              </a>
+              link.isAnchor ? (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className="relative text-[#211e0f] font-semibold text-lg hover:text-[#f58a1f] 
+                           transition-colors duration-300 group"
+                  onClick={(e) => {
+                    if (window.location.pathname === '/') {
+                      e.preventDefault();
+                      const targetId = link.href.replace('/#', '#');
+                      const element = document.querySelector(targetId);
+                      if (element) {
+                        element.scrollIntoView({ behavior: 'smooth' });
+                      }
+                    }
+                  }}
+                >
+                  {link.label}
+                  <span
+                    className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#f6b638] 
+                             transition-all duration-300 group-hover:w-full"
+                  />
+                </a>
+              ) : (
+                <Link
+                  key={link.href}
+                  to={link.href}
+                  className="relative text-[#211e0f] font-semibold text-lg hover:text-[#f58a1f] 
+                           transition-colors duration-300 group"
+                >
+                  {link.label}
+                  <span
+                    className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#f6b638] 
+                             transition-all duration-300 group-hover:w-full"
+                  />
+                </Link>
+              )
             ))}
             {/* Products Link */}
             <Link
@@ -181,15 +206,37 @@ const Navigation = () => {
                 </SheetHeader>
                 <div className="flex flex-col gap-4 mt-8">
                   {navLinks.map((link) => (
-                    <a
-                      key={link.href}
-                      href={link.href}
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="text-xl font-semibold text-[#211e0f] hover:text-[#f58a1f] 
-                               transition-colors duration-300 py-2 border-b border-[#f6b638]/20"
-                    >
-                      {link.label}
-                    </a>
+                    link.isAnchor ? (
+                      <a
+                        key={link.href}
+                        href={link.href}
+                        onClick={(e) => {
+                          setIsMobileMenuOpen(false);
+                          if (window.location.pathname === '/') {
+                            e.preventDefault();
+                            const targetId = link.href.replace('/#', '#');
+                            const element = document.querySelector(targetId);
+                            if (element) {
+                              element.scrollIntoView({ behavior: 'smooth' });
+                            }
+                          }
+                        }}
+                        className="text-xl font-semibold text-[#211e0f] hover:text-[#f58a1f] 
+                                 transition-colors duration-300 py-2 border-b border-[#f6b638]/20"
+                      >
+                        {link.label}
+                      </a>
+                    ) : (
+                      <Link
+                        key={link.href}
+                        to={link.href}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="text-xl font-semibold text-[#211e0f] hover:text-[#f58a1f] 
+                                 transition-colors duration-300 py-2 border-b border-[#f6b638]/20"
+                      >
+                        {link.label}
+                      </Link>
+                    )
                   ))}
                   <Link
                     to="/products"
