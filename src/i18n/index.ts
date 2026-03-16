@@ -30,9 +30,9 @@ i18n
 i18n.on('languageChanged', (lng) => {
   const htmlElement = document.documentElement;
   if (lng === 'ar') {
-    htmlElement.setAttribute('dir', 'rtl');
+    htmlElement.setAttribute('dir', 'ltr');
     htmlElement.setAttribute('lang', 'ar');
-    document.body.style.direction = 'rtl';
+    document.body.style.direction = 'ltr';
   } else {
     htmlElement.setAttribute('dir', 'ltr');
     htmlElement.setAttribute('lang', lng);
@@ -45,9 +45,9 @@ i18n.on('languageChanged', (lng) => {
 // Set initial direction on load
 const initialLng = i18n.language || 'en';
 if (initialLng === 'ar') {
-  document.documentElement.setAttribute('dir', 'rtl');
+  document.documentElement.setAttribute('dir', 'ltr');
   document.documentElement.setAttribute('lang', 'ar');
-  document.body.style.direction = 'rtl';
+  document.body.style.direction = 'ltr';
 } else {
   document.documentElement.setAttribute('dir', 'ltr');
   document.documentElement.setAttribute('lang', initialLng);
