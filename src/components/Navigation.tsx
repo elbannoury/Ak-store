@@ -34,16 +34,7 @@ const Navigation = () => {
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
-    const htmlElement = document.documentElement;
-    if (lng === 'ar') {
-      htmlElement.setAttribute('dir', 'rtl');
-      htmlElement.setAttribute('lang', 'ar');
-      document.body.style.direction = 'rtl';
-    } else {
-      htmlElement.setAttribute('dir', 'ltr');
-      htmlElement.setAttribute('lang', lng);
-      document.body.style.direction = 'ltr';
-    }
+    document.dir = lng === 'ar' ? 'rtl' : 'ltr';
   };
 
   const navLinks = [
