@@ -113,7 +113,7 @@ const AllProducts = () => {
       id: product.id,
       name: product.name,
       price: product.price,
-      image: product.image,
+      image: product.image || (product.images && product.images[0]) || '',
       category: product.category,
     });
     toast.success(`${product.name} ${t('products.addToCart')}`);
