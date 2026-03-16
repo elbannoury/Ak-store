@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, Star, Minus, Plus, ShoppingCart, MessageCircle } from 'lucide-react';
+import { ArrowLeft, Star, Minus, Plus, ShoppingCart, MessageCircle, Heart, Share2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { toast } from 'sonner';
+import { products as initialProducts } from '@/data';
+import { useCartStore } from '@/store/cartStore';
 
 // نوع بيانات المنتج
 interface Product {
@@ -14,6 +16,7 @@ interface Product {
   description: string;
   price: number;
   originalPrice?: number;
+  image?: string;
   images: string[];
   category: string;
   sku?: string;
@@ -29,6 +32,7 @@ export default function ProductDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { addItem } = useCartStore();
   
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
@@ -42,37 +46,28 @@ export default function ProductDetail() {
     const fetchProduct = async () => {
       try {
         setLoading(true);
-        // هنا يمكنك استبدال هذا بطلب API حقيقي
-        // const response = await fetch(`/api/products/${id}`);
-        // const data = await response.json();
         
-        // مثال مؤقت (استبدله ببياناتك الحقيقية):
-        const mockProduct: Product = {
-          id: id || '1',
-          name: 'منتج تجريبي',
-          description: 'وصف المنتج التجريبي',
-          price: 299,
-          originalPrice: 399,
-          images: ['/placeholder-1.jpg', '/placeholder-2.jpg'],
-          category: 'electronics',
-          sku: 'SKU-001',
-          rating: 4.5,
-          isSale: true,
-          isNew: true,
-          colors: ['أسود', 'أبيض', 'أزرق'],
-          sizes: ['S', 'M', 'L', 'XL'],
-          stock: 10
-        };
+        // جلب البيانات من localStorage أو البيانات الأولية
+        const savedProducts = localStorage.getItem('ak-products');
+        const allProducts = savedProducts ? JSON.parse(savedProducts) : initialProducts;
         
-        setProduct(mockProduct);
-        if (mockProduct.colors?.length) {
-          setSelectedColor(mockProduct.colors[0]);
-        }
-        if (mockProduct.sizes?.length) {
-          setSelectedSize(mockProduct.sizes[0]);
+        const foundProduct = allProducts.find((p: Product) => p.id === id);
+        
+        if (foundProduct) {
+          // تأكد من وجود images حتى لو كانت صورة واحدة
+          if (!foundProduct.images || foundProduct.images.length === 0) {
+            foundProduct.images = [foundProduct.image || ''];
+          }
+          setProduct(foundProduct);
+          if (foundProduct.colors?.length) {
+            setSelectedColor(foundProduct.colors[0]);
+          }
+          if (foundProduct.sizes?.length) {
+            setSelectedSize(foundProduct.sizes[0]);
+          }
         }
       } catch (error) {
-        toast.error(t('errors.fetchProduct'));
+        toast.error('Error loading product');
         console.error('Error fetching product:', error);
       } finally {
         setLoading(false);
@@ -82,23 +77,42 @@ export default function ProductDetail() {
     if (id) {
       fetchProduct();
     }
-  }, [id, t]);
+  }, [id]);
 
   // إضافة إلى السلة
   const handleAddToCart = () => {
     if (!product) return;
     
-    // منطق إضافة إلى السلة هنا
-    toast.success(t('cart.added', { name: product.name }));
+    addItem({
+      id: product.id,
+      name: `${product.name}${selectedSize ? ` (${selectedSize})` : ''}${selectedColor ? ` - ${selectedColor}` : ''}`,
+      price: product.price,
+      image: product.images[0] || '',
+      category: product.category,
+      size: selectedSize,
+    });
+    toast.success(`${product.name} ${t('products.addToCart')}`);
   };
 
   // الطلب عبر واتساب
   const handleWhatsAppOrder = () => {
     if (!product) return;
     
-    const message = `مرحباً، أريد طلب المنتج: ${product.name} (الكمية: ${quantity})`;
-    const whatsappUrl = `https://wa.me/YOUR_PHONE_NUMBER?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
+    const cartItem = {
+      id: product.id,
+      name: `${product.name}${selectedSize ? ` (${selectedSize})` : ''}${selectedColor ? ` - ${selectedColor}` : ''}`,
+      price: product.price,
+      image: product.images[0] || '',
+      category: product.category,
+      quantity: quantity,
+      size: selectedSize,
+    };
+    
+    // استخدام خدمة واتساب الموجودة في المشروع
+    import('@/services/whatsappService').then(({ whatsappService }) => {
+      whatsappService.quickOrder([cartItem], product.price * quantity);
+      toast.success('Opening WhatsApp to complete your order!');
+    });
   };
 
   if (loading) {
