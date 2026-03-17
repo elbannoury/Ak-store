@@ -37,19 +37,20 @@
 }
 
 @layer components {
-  /* This class ensures content is centered and doesn't expand to 100% width on large screens */
-  .container-custom {
-    @apply w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12;
-  }
-
-  /* Padding for sections */
   .section-padding {
-    @apply py-12 md:py-20 lg:py-24;
+    @apply px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20;
   }
 
-  /* Button styles */
+  .section-padding-lg {
+    @apply px-4 sm:px-6 md:px-10 lg:px-16 xl:px-20 2xl:px-24;
+  }
+
   .btn-primary {
     @apply px-6 py-3 bg-[#f6b638] hover:bg-[#f58a1f] text-[#211e0f] font-bold rounded-xl transition-all duration-300 hover:scale-105;
+  }
+
+  .container-responsive {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16;
   }
 }
 
@@ -73,4 +74,42 @@ html {
 
 body {
   transition: direction 0.3s ease;
+}
+
+/* Responsive font sizes */
+@media (max-width: 640px) {
+  body {
+    @apply text-sm;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  body {
+    @apply text-base;
+  }
+}
+
+@media (min-width: 1025px) {
+  body {
+    @apply text-lg;
+  }
+}
+
+/* Image gallery responsive */
+.image-gallery {
+  @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4;
+}
+
+.image-gallery-item {
+  @apply aspect-square rounded-lg overflow-hidden cursor-pointer transition-transform duration-300 hover:scale-105;
+}
+
+/* Product card responsive */
+.product-card {
+  @apply transition-all duration-300;
+}
+
+/* Responsive grid for products */
+.products-grid {
+  @apply grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6;
 }
