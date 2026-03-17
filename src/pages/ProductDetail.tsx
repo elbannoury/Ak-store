@@ -142,7 +142,7 @@ export default function ProductDetail() {
 
   return (
     <div className="min-h-screen bg-[#fff9ed]">
-      <div className="container-custom py-6 md:py-12">
+      <div className="container-custom px-4 sm:px-6 lg:px-8 py-6 md:py-12">
         {/* زر الرجوع */}
         <button 
           onClick={() => navigate(-1)} 
@@ -369,7 +369,7 @@ export default function ProductDetail() {
                 className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-6 rounded-2xl flex items-center justify-center gap-3 transition-all duration-300 hover:shadow-xl hover:scale-105 text-lg"
               >
                 <MessageCircle className="h-6 w-6" />
-                {t('productDetail.whatsappOrder')}
+                WhatsApp
               </button>
             </div>
 
