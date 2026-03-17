@@ -35,3 +35,42 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  /* This class ensures content is centered and doesn't expand to 100% width on large screens */
+  .container-custom {
+    @apply w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12;
+  }
+
+  /* Padding for sections */
+  .section-padding {
+    @apply py-12 md:py-20 lg:py-24;
+  }
+
+  /* Button styles */
+  .btn-primary {
+    @apply px-6 py-3 bg-[#f6b638] hover:bg-[#f58a1f] text-[#211e0f] font-bold rounded-xl transition-all duration-300 hover:scale-105;
+  }
+}
+
+/* RTL Support for Arabic */
+html[dir="rtl"],
+[dir="rtl"] {
+  direction: rtl;
+  text-align: right;
+}
+
+html[dir="ltr"],
+[dir="ltr"] {
+  direction: ltr;
+  text-align: left;
+}
+
+/* Smooth transitions for direction changes */
+html {
+  transition: direction 0.3s ease;
+}
+
+body {
+  transition: direction 0.3s ease;
+}
