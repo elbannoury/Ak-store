@@ -65,18 +65,11 @@ const Navigation = () => {
             to="/"
             className="flex items-center gap-2 group"
           >
-            <div className="w-12 h-12 bg-[#f6b638] rounded-full flex items-center justify-center 
-                          transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12">
-              <span className="text-2xl font-bold text-[#211e0f]" style={{ fontFamily: 'Rowdies, cursive' }}>
-                AK
-              </span>
-            </div>
-            <span
-              className={`text-2xl font-bold text-[#211e0f] hidden sm:block transition-colors duration-300`}
-              style={{ fontFamily: 'Rowdies, cursive' }}
-            >
-              KIDS
-            </span>
+            <img 
+              src="https://d2xsxph8kpxj0f.cloudfront.net/310519663271387062/VF4RMPmDrzh3fniVRJQ8RL/ak-store-logo-5Bhifpi6HoyoBum9BqZXBB.webp" 
+              alt="AK Store Logo" 
+              className="h-12 w-auto transition-transform duration-300 group-hover:scale-110" 
+            />
           </Link>
 
           {/* Desktop Navigation */}
