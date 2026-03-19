@@ -3,6 +3,11 @@ module.exports = {
   darkMode: ["class"],
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
+    fontFamily: {
+      'playfair': ['Playfair Display', 'serif'],
+      'lato': ['Lato', 'sans-serif'],
+      'rowdies': ['Rowdies', 'cursive'],
+    },
     extend: {
       colors: {
         border: "hsl(var(--border))",
