@@ -27,12 +27,21 @@ const AllProducts = () => {
 
   const [products, setProducts] = useState<Product[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>(searchParams.get('category') || 'all');
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000]);
   const [sortBy, setSortBy] = useState<'price-asc' | 'price-desc' | 'newest' | 'rating'>('newest');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [showFilters, setShowFilters] = useState(false);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
+
+  // Debounce search query
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
 
   // Load products
   useEffect(() => {
@@ -68,8 +77,8 @@ const AllProducts = () => {
     let result = [...products];
 
     // Search filter
-    if (searchQuery) {
-      const query = searchQuery.toLowerCase();
+    if (debouncedSearchQuery) {
+      const query = debouncedSearchQuery.toLowerCase();
       result = result.filter(
         (p) =>
           p.name.toLowerCase().includes(query) ||
@@ -105,7 +114,7 @@ const AllProducts = () => {
     }
 
     return result;
-  }, [products, searchQuery, selectedCategory, priceRange, sortBy]);
+  }, [products, debouncedSearchQuery, selectedCategory, priceRange, sortBy]);
 
   const handleAddToCart = (product: Product, e: React.MouseEvent) => {
     e.stopPropagation();
