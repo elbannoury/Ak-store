@@ -90,14 +90,11 @@ const Footer = () => {
           {/* Brand Column */}
           <div className="lg:col-span-1">
             <Link to="/" className="flex items-center gap-2 mb-6">
-              <div className="w-12 h-12 bg-[#f6b638] rounded-full flex items-center justify-center">
-                <span className="text-xl font-bold text-[#211e0f]" style={{ fontFamily: 'Rowdies, cursive' }}>
-                  AK
-                </span>
-              </div>
-              <span className="text-2xl font-bold" style={{ fontFamily: 'Rowdies, cursive' }}>
-                KIDS
-              </span>
+              <img 
+                src="https://d2xsxph8kpxj0f.cloudfront.net/310519663271387062/VF4RMPmDrzh3fniVRJQ8RL/ak-store-logo-5Bhifpi6HoyoBum9BqZXBB.webp" 
+                alt="AK Store Logo" 
+                className="h-12 w-auto" 
+              />
             </Link>
             <p className="text-white/60 mb-6">
               Morocco's favorite kids fashion destination. Quality clothes for happy kids.
@@ -120,7 +117,7 @@ const Footer = () => {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-lg font-bold mb-6 text-[#f6b638]" style={{ fontFamily: 'Rowdies, cursive' }}>
+            <h3 className="text-lg font-bold mb-6 text-[#f6b638] font-playfair">
               Quick Links
             </h3>
             <ul className="space-y-3">
@@ -140,7 +137,7 @@ const Footer = () => {
 
           {/* Contact Info */}
           <div>
-            <h3 className="text-lg font-bold mb-6 text-[#f6b638]" style={{ fontFamily: 'Rowdies, cursive' }}>
+            <h3 className="text-lg font-bold mb-6 text-[#f6b638] font-playfair">
               {t('footer.contact.title')}
             </h3>
             <ul className="space-y-4">
@@ -177,7 +174,7 @@ const Footer = () => {
 
           {/* Newsletter */}
           <div>
-            <h3 className="text-lg font-bold mb-6 text-[#f6b638]" style={{ fontFamily: 'Rowdies, cursive' }}>
+            <h3 className="text-lg font-bold mb-6 text-[#f6b638] font-playfair">
               {t('footer.newsletter.title')}
             </h3>
             <p className="text-white/60 mb-4">
