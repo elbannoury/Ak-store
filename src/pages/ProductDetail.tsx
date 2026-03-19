@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, Star, Minus, Plus, ShoppingCart, MessageCircle, Heart, Share2, Truck, Shield, RotateCcw } from 'lucide-react';
+import { ArrowLeft, Star, Minus, Plus, ShoppingCart, MessageCircle, Heart, Share2, Truck, Shield, RotateCcw, Copy, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
@@ -41,6 +41,7 @@ export default function ProductDetail() {
   const [selectedSize, setSelectedSize] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   // جلب بيانات المنتج
   useEffect(() => {
@@ -93,6 +94,18 @@ export default function ProductDetail() {
       size: selectedSize,
     });
     toast.success(`${product.name} ${t('products.addToCart')}`);
+  };
+
+  // نسخ رابط المنتج
+  const handleCopyUrl = () => {
+    const productUrl = `${window.location.origin}/product/${id}`;
+    navigator.clipboard.writeText(productUrl).then(() => {
+      setCopied(true);
+      toast.success('Product link copied to clipboard!');
+      setTimeout(() => setCopied(false), 2000);
+    }).catch(() => {
+      toast.error('Failed to copy link');
+    });
   };
 
   // الطلب عبر واتساب
@@ -190,10 +203,14 @@ export default function ProductDetail() {
                   <Heart className={`h-6 w-6 ${isFavorite ? 'fill-current' : ''}`} />
                 </button>
                 <button
-                  onClick={() => toast.info('Share functionality coming soon!')}
-                  className="w-12 h-12 rounded-full bg-white text-[#211e0f] flex items-center justify-center shadow-lg hover:bg-[#f6b638] hover:text-white transition-all duration-300 hover:scale-110"
+                  onClick={handleCopyUrl}
+                  className={`w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-110 ${
+                    copied
+                      ? 'bg-green-500 text-white'
+                      : 'bg-white text-[#211e0f] hover:bg-[#f6b638] hover:text-white'
+                  }`}
                 >
-                  <Share2 className="h-6 w-6" />
+                  {copied ? <Check className="h-6 w-6" /> : <Copy className="h-6 w-6" />}
                 </button>
               </div>
             </div>
@@ -371,6 +388,40 @@ export default function ProductDetail() {
                 <MessageCircle className="h-6 w-6" />
                 WhatsApp
               </button>
+            </div>
+
+            {/* قسم الحوافز والمميزات */}
+            <div className="bg-gradient-to-r from-[#f6b638]/10 to-[#f58a1f]/10 rounded-2xl p-6 border border-[#f6b638]/20">
+              <h3 className="font-bold text-lg text-[#211e0f] mb-4">Why Choose AK Store?</h3>
+              <div className="space-y-4">
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 bg-green-500/20 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Check className="h-5 w-5 text-green-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-[#211e0f] mb-1">Free Shipping</h4>
+                    <p className="text-sm text-[#211e0f]/70">On all orders over 200 MAD</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 bg-blue-500/20 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Shield className="h-5 w-5 text-blue-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-[#211e0f] mb-1">30-Day Money Back Guarantee</h4>
+                    <p className="text-sm text-[#211e0f]/70">Not satisfied? Full refund, no questions asked</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 bg-purple-500/20 rounded-full flex items-center justify-center flex-shrink-0">
+                    <RotateCcw className="h-5 w-5 text-purple-600" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-[#211e0f] mb-1">Easy Returns</h4>
+                    <p className="text-sm text-[#211e0f]/70">Hassle-free returns within 30 days</p>
+                  </div>
+                </div>
+              </div>
             </div>
 
             {/* المميزات */}
