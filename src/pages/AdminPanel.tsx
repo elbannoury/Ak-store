@@ -14,6 +14,7 @@ import {
   Eye,
   EyeOff
 } from 'lucide-react';
+import MainLayout from '@/components/MainLayout';
 import { products as initialProducts } from '@/data';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -99,8 +100,9 @@ const AdminPanel = () => {
 
   if (!isLoggedIn) {
     return (
-      <div className="min-h-screen bg-[#211e0f] flex items-center justify-center p-4">
-        <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl p-8">
+      <MainLayout showCartDrawer={false}>
+        <div className="min-h-screen bg-[#211e0f] flex items-center justify-center p-4">
+          <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl p-8">
           <div className="text-center mb-8">
             <div className="w-20 h-20 bg-[#f6b638] rounded-full flex items-center justify-center mx-auto mb-4">
               <span className="text-3xl font-bold text-[#211e0f]" style={{ fontFamily: 'Rowdies, cursive' }}>
@@ -133,20 +135,22 @@ const AdminPanel = () => {
             <Button type="submit" className="w-full btn-primary py-4">
               {t('admin.loginButton')}
             </Button>
-          </form>
+            </form>
 
-          <button
-            onClick={() => navigate('/')}
-            className="w-full mt-4 text-center text-gray-500 hover:text-[#f58a1f] transition-colors"
-          >
-            ← Back to Website
-          </button>
+            <button
+              onClick={() => navigate('/')}
+              className="w-full mt-4 text-center text-gray-500 hover:text-[#f58a1f] transition-colors"
+            >
+              ← Back to Website
+            </button>
+          </div>
         </div>
-      </div>
+      </MainLayout>
     );
   }
 
   return (
+    <MainLayout showCartDrawer={false}>
     <div className="min-h-screen bg-[#f5f5f5]">
       {/* Admin Header */}
       <header className="bg-[#211e0f] text-white sticky top-0 z-50">
@@ -362,6 +366,7 @@ const AdminPanel = () => {
         />
       )}
     </div>
+    </MainLayout>
   );
 };
 
@@ -609,7 +614,7 @@ const ProductEditModal = ({ product, isNew, onSave, onCancel }: ProductEditModal
               {t('admin.cancel')}
             </Button>
           </div>
-        </form>
+         </form>
       </div>
     </div>
   );
