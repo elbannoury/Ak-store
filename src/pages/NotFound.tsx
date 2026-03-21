@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import MainLayout from '@/components/MainLayout';
 import { Button } from '@/components/ui/button';
 import { Home, AlertCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -8,6 +9,7 @@ export default function NotFound() {
   const { t } = useTranslation();
 
   return (
+    <MainLayout showCartDrawer={false}>
     <div className="min-h-screen flex items-center justify-center bg-background">
       <div className="text-center space-y-6 px-4">
         <AlertCircle className="mx-auto h-24 w-24 text-muted-foreground" />
@@ -22,5 +24,6 @@ export default function NotFound() {
         </Button>
       </div>
     </div>
+    </MainLayout>
   );
 }
