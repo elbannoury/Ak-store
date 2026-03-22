@@ -11,6 +11,7 @@ import {
   ChevronDown,
   X
 } from 'lucide-react';
+import MainLayout from '@/components/MainLayout';
 import { categories } from '@/data';
 import { useCartStore } from '@/store/cartStore';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
@@ -139,6 +140,7 @@ const AllProducts = () => {
     searchQuery || selectedCategory !== 'all' || priceRange[1] < 1000;
 
   return (
+    <MainLayout showCartDrawer={false}>
     <div className="min-h-screen bg-[#fff9ed]">
       {/* Header */}
       <div className="sticky top-0 z-40 bg-white/90 backdrop-blur-lg shadow-sm">
@@ -486,9 +488,9 @@ const AllProducts = () => {
             ))}
           </div>
         )}
-      </div>
+       </div>
     </div>
+    </MainLayout>
   );
 };
-
 export default AllProducts;
