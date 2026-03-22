@@ -191,56 +191,83 @@ const Navigation = () => {
                   )}
                 </button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-[300px] bg-[#fff9ed] border-l-[#f6b638]/20">
+              <SheetContent side="right" className="w-[300px] bg-[#fff9ed] border-l-[#f6b638]/20 overflow-y-auto">
                 <SheetHeader>
-                  <SheetTitle className="text-[#211e0f]" style={{ fontFamily: 'Rowdies, cursive' }}>
+                  <SheetTitle className="text-[#211e0f] text-2xl" style={{ fontFamily: 'Rowdies, cursive' }}>
                     AK KIDS
                   </SheetTitle>
                 </SheetHeader>
-                <div className="flex flex-col gap-4 mt-8">
-                  {navLinks.map((link) => (
-                    link.isAnchor ? (
-                      <a
-                        key={link.href}
-                        href={link.href}
-                        onClick={(e) => {
-                          setIsMobileMenuOpen(false);
-                          if (window.location.pathname === '/') {
-                            e.preventDefault();
-                            const targetId = link.href.replace('/#', '#');
-                            const element = document.querySelector(targetId);
-                            if (element) {
-                              element.scrollIntoView({ behavior: 'smooth' });
+                <div className="flex flex-col gap-6 mt-10">
+                  {/* Navigation Links */}
+                  <div className="space-y-2">
+                    <p className="text-xs uppercase tracking-wider text-[#211e0f]/60 font-bold px-2">Menu</p>
+                    {navLinks.map((link) => (
+                      link.isAnchor ? (
+                        <a
+                          key={link.href}
+                          href={link.href}
+                          onClick={(e) => {
+                            setIsMobileMenuOpen(false);
+                            if (window.location.pathname === '/') {
+                              e.preventDefault();
+                              const targetId = link.href.replace('/#', '#');
+                              const element = document.querySelector(targetId);
+                              if (element) {
+                                element.scrollIntoView({ behavior: 'smooth' });
+                              }
                             }
-                          }
-                        }}
-                        className="text-xl font-semibold text-[#211e0f] hover:text-[#f58a1f] 
-                                 transition-colors duration-300 py-2 border-b border-[#f6b638]/20"
-                      >
-                        {link.label}
-                      </a>
-                    ) : (
-                      <Link
-                        key={link.href}
-                        to={link.href}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        className="text-xl font-semibold text-[#211e0f] hover:text-[#f58a1f] 
-                                 transition-colors duration-300 py-2 border-b border-[#f6b638]/20"
-                      >
-                        {link.label}
-                      </Link>
-                    )
-                  ))}
-                  <Link
-                    to="/products"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="text-xl font-semibold text-[#211e0f] hover:text-[#f58a1f] 
-                             transition-colors duration-300 py-2 border-b border-[#f6b638]/20
-                             flex items-center gap-2"
-                  >
-                    <Store className="w-5 h-5" />
-                    All Products
-                  </Link>
+                          }}
+                          className="block px-4 py-3 rounded-lg text-lg font-semibold text-[#211e0f] hover:bg-[#f6b638]/20 hover:text-[#f58a1f] transition-all duration-300"
+                        >
+                          {link.label}
+                        </a>
+                      ) : (
+                        <Link
+                          key={link.href}
+                          to={link.href}
+                          onClick={() => setIsMobileMenuOpen(false)}
+                          className="block px-4 py-3 rounded-lg text-lg font-semibold text-[#211e0f] hover:bg-[#f6b638]/20 hover:text-[#f58a1f] transition-all duration-300"
+                        >
+                          {link.label}
+                        </Link>
+                      )
+                    ))}
+                    <Link
+                      to="/products"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="flex items-center gap-3 px-4 py-3 rounded-lg text-lg font-semibold text-[#211e0f] hover:bg-[#f6b638]/20 hover:text-[#f58a1f] transition-all duration-300"
+                    >
+                      <Store className="w-5 h-5" />
+                      All Products
+                    </Link>
+                  </div>
+
+                  {/* Divider */}
+                  <div className="h-px bg-[#f6b638]/20"></div>
+
+                  {/* Language Selector */}
+                  <div>
+                    <p className="text-xs uppercase tracking-wider text-[#211e0f]/60 font-bold px-2 mb-3">Language</p>
+                    <div className="space-y-2">
+                      {languages.map((lang) => (
+                        <button
+                          key={lang.code}
+                          onClick={() => {
+                            changeLanguage(lang.code);
+                            setIsMobileMenuOpen(false);
+                          }}
+                          className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg font-semibold transition-all duration-300 ${
+                            i18n.language === lang.code
+                              ? 'bg-[#f6b638] text-[#211e0f] shadow-md'
+                              : 'text-[#211e0f] hover:bg-[#f6b638]/20 hover:text-[#f58a1f]'
+                          }`}
+                        >
+                          <span className="text-xl">{lang.flag}</span>
+                          <span>{lang.label}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </SheetContent>
             </Sheet>
