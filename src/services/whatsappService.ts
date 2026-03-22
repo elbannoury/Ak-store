@@ -147,9 +147,9 @@ Please contact me to complete the order.
 
 // Create default instance
 export const whatsappService = new WhatsAppService(
-  import.meta.env.VITE_WHATSAPP_NUMBER || '212612345678',
-  import.meta.env.VITE_CALLMEBOT_API_KEY || '',
-  false
+  import.meta.env.VITE_WHATSAPP_NUMBER || '970700720490',
+  import.meta.env.VITE_CALLMEBOT_API_KEY || '6752928',
+  true
 );
 
 export default WhatsAppService;
