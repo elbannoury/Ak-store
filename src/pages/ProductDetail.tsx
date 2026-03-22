@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeft, Star, Minus, Plus, ShoppingCart, MessageCircle, Heart, Share2, Truck, Shield, RotateCcw, Copy, Check } from 'lucide-react';
+import MainLayout from '@/components/MainLayout';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
@@ -154,6 +155,7 @@ export default function ProductDetail() {
     : 0;
 
   return (
+    <MainLayout showCartDrawer={false}>
     <div className="min-h-screen bg-[#fff9ed]">
       <div className="container-custom px-4 sm:px-6 lg:px-8 py-6 md:py-12">
         {/* زر الرجوع */}
@@ -443,5 +445,6 @@ export default function ProductDetail() {
         </div>
       </div>
     </div>
+    </MainLayout>
   );
 }
