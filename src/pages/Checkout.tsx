@@ -13,6 +13,7 @@ import {
   MessageCircle,
   Truck
 } from 'lucide-react';
+import MainLayout from '@/components/MainLayout';
 import { useCartStore } from '@/store/cartStore';
 import { whatsappService } from '@/services/whatsappService';
 import { googleSheetsService } from '@/services/googleSheetsService';
@@ -138,6 +139,7 @@ const Checkout = () => {
   };
 
   return (
+    <MainLayout showCartDrawer={false}>
     <div className="min-h-screen bg-[#fff9ed]">
       {/* Header */}
       <div className="sticky top-0 z-40 bg-white/90 backdrop-blur-lg shadow-sm">
@@ -390,12 +392,12 @@ const Checkout = () => {
                 </div>
                 <p className="text-xs text-gray-600">{t('checkout.support')}</p>
               </div>
-            </div>
+             </div>
           </div>
         </div>
       </div>
     </div>
+    </MainLayout>
   );
 };
-
 export default Checkout;
