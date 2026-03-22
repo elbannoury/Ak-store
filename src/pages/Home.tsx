@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
-import Navigation from '@/components/Navigation';
-import CartDrawer from '@/components/CartDrawer';
+import MainLayout from '@/components/MainLayout';
 import Hero from '@/sections/Hero';
 import Categories from '@/sections/Categories';
 import Products from '@/sections/Products';
@@ -8,7 +7,6 @@ import Features from '@/sections/Features';
 import About from '@/sections/About';
 import CTA from '@/sections/CTA';
 import Testimonials from '@/sections/Testimonials';
-import Footer from '@/sections/Footer';
 import { products } from '@/data';
 
 const Home = () => {
@@ -21,9 +19,7 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="w-full min-h-screen bg-[#fff9ed]">
-      <Navigation />
-      <CartDrawer />
+    <MainLayout>
       <Hero />
       <Categories />
       <Products />
@@ -31,8 +27,7 @@ const Home = () => {
       <About />
       <CTA />
       <Testimonials />
-      <Footer />
-    </div>
+    </MainLayout>
   );
 };
 
