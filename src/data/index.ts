@@ -292,9 +292,9 @@ export const features = [
 export const WHATSAPP_CONFIG = {
   // Replace with your actual phone number (with country code, no + or spaces)
   // Example: 212612345678 for Moroccan number
-  phoneNumber: '212612345678',
+  phoneNumber: '2120700720490',
   // CallMeBot API Key (get from https://www.callmebot.com/blog/free-api-whatsapp-messages/)
-  apiKey: '',
+  apiKey: '6752928',
 };
 
 // Google Sheets Configuration
