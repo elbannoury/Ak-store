@@ -24,7 +24,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         {/* المسارات الأخرى */}
         <Route path="/products" element={<AllProducts />} />
         <Route path="/product/:id" element={<ProductDetail />} />
-        <Route path="/admin" element={<AdminPanel />} />
+        <Route path="/imomartheadminofak33" element={<AdminPanel />} />
         <Route path="/checkout" element={<Checkout />} />
         
         {/* توجيه أي مسار غير معروف إلى الصفحة الرئيسية */}
