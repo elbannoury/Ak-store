@@ -203,30 +203,34 @@ export const products: Product[] = [
   },
 ];
 
+const calculateCategoryCount = (categoryId: string): number => {
+  return products.filter(p => p.category === categoryId).length;
+};
+
 export const categories: Category[] = [
   {
     id: 'baby',
     name: 'Baby',
     image: '/category-baby.jpg',
-    itemCount: 45,
+    itemCount: calculateCategoryCount('baby'),
   },
   {
     id: 'boys',
     name: 'Boys',
     image: '/category-boys.jpg',
-    itemCount: 78,
+    itemCount: calculateCategoryCount('boys'),
   },
   {
     id: 'girls',
     name: 'Girls',
     image: '/category-girls.jpg',
-    itemCount: 82,
+    itemCount: calculateCategoryCount('girls'),
   },
   {
     id: 'accessories',
     name: 'Accessories',
     image: '/category-accessories.jpg',
-    itemCount: 36,
+    itemCount: calculateCategoryCount('accessories'),
   },
 ];
 
