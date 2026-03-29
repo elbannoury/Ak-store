@@ -394,7 +394,7 @@ export default function ProductDetail() {
 
             {/* قسم الحوافز والمميزات */}
             <div className="bg-gradient-to-r from-[#f6b638]/10 to-[#f58a1f]/10 rounded-2xl p-6 border border-[#f6b638]/20">
-              <h3 className="font-bold text-lg text-[#211e0f] mb-4">Why Choose AK Store?</h3>
+              <h3 className="font-bold text-lg text-[#211e0f] mb-4">Why Choose AKRENACE?</h3>
               <div className="space-y-4">
                 <div className="flex items-start gap-4">
                   <div className="w-10 h-10 bg-green-500/20 rounded-full flex items-center justify-center flex-shrink-0">
