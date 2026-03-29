@@ -67,7 +67,7 @@ const Navigation = () => {
           >
             <img 
               src="https://d2xsxph8kpxj0f.cloudfront.net/310519663271387062/VF4RMPmDrzh3fniVRJQ8RL/ak-store-logo-5Bhifpi6HoyoBum9BqZXBB.webp" 
-              alt="AK Store Logo" 
+              alt="AKRENACE Logo" 
               className="h-12 w-auto transition-transform duration-300 group-hover:scale-110" 
             />
           </Link>
@@ -194,7 +194,7 @@ const Navigation = () => {
               <SheetContent side="right" className="w-[300px] bg-[#fff9ed] border-l-[#f6b638]/20 overflow-y-auto">
                 <SheetHeader>
                   <SheetTitle className="text-[#211e0f] text-2xl" style={{ fontFamily: 'Rowdies, cursive' }}>
-                    AK KIDS
+                    AKRENACE
                   </SheetTitle>
                 </SheetHeader>
                 <div className="flex flex-col gap-6 mt-10">
