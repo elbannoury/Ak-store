@@ -34,7 +34,7 @@ export class WhatsAppService {
       .join('\n');
 
     const message = `
-🛍️ *NEW ORDER - AK KIDS*
+🛍️ *NEW ORDER - AKRENACE*
 
 👤 *Customer Information:*
 Name: ${customerInfo.name}
@@ -50,7 +50,7 @@ ${itemsList}
 ${customerInfo.notes ? `📝 *Notes:* ${customerInfo.notes}` : ''}
 
 ---
-Order from AK Kids Website
+Order from AKRENACE Website
     `.trim();
 
     return message;
@@ -130,7 +130,7 @@ Order from AK Kids Website
       .join('\n');
 
     const message = `
-🛍️ *AK KIDS ORDER*
+🛍️ *AKRENACE ORDER*
 
 ${itemsList}
 
