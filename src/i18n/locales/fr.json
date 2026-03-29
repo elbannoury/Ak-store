@@ -8,9 +8,9 @@
     "products": "Produits"
   },
   "hero": {
-    "title": "AK KIDS",
-    "subtitle": "La Destination Mode Enfant Préférée du Maroc",
-    "description": "Découvrez des vêtements tendance, confortables et abordables pour vos petits. Des tenues ludiques aux essentiels cozy, nous avons tout pour garder vos enfants stylés et heureux !",
+    "title": "AKRENACE",
+    "subtitle": "Parce que votre enfant mérite l'élégance qui touche le cœur",
+    "description": "Chez AKRENACE, nous créons des vêtements qui racontent une enfance heureuse. Nous allions confort ultime et designs modernes pour accompagner vos enfants dans chaque aventure, de leurs premiers pas à leurs plus grands rêves.",
     "ctaPrimary": "Voir la Collection",
     "ctaSecondary": "Explorer Plus",
     "newCollection": "Nouvelle Collection",
@@ -19,32 +19,32 @@
     "rating": "Note"
   },
   "about": {
-    "title": "Conçu pour Jouer, Fait pour les Souvenirs",
-    "description": "Chez AK Kids, nous croyons que chaque enfant mérite de look et de se sentir au mieux. Nos vêtements sont fabriqués avec amour, utilisant des tissus doux et des coutures durables qui suivent chaque aventure.",
+    "title": "Plus que des vêtements.. ce sont des souvenirs en devenir",
+    "description": "Chez AKRENACE, nous savons que chaque vêtement porté par votre enfant fait partie d'un beau souvenir. C'est pourquoi nous choisissons avec soin les tissus naturels les plus fins qui enveloppent leur peau de douceur.",
     "features": {
-      "quality": "Tissus de Qualité Premium",
-      "design": "Designs Tendance",
+      "quality": "Tissus Naturels Premium",
+      "design": "Designs Faits avec Amour",
       "comfort": "Confort Toute la Journée"
     },
-    "cta": "Lire Notre Histoire",
-    "badge": "À Propos d'AK Kids",
-    "years": "Ans d'Excellence"
+    "cta": "Découvrir Notre Histoire",
+    "badge": "À Propos d'AKRENACE",
+    "years": "Années de Confiance"
   },
   "categories": {
-    "title": "Acheter par Catégorie",
-    "subtitle": "Trouvez le style parfait pour vos petits",
+    "title": "Achetez pour votre enfant avec amour",
+    "subtitle": "Choisissez l'élégance qui correspond à la personnalité unique de votre enfant",
     "baby": "Bébé",
     "boys": "Garçons",
     "girls": "Filles",
     "accessories": "Accessoires",
-    "shopNow": "Acheter",
+    "shopNow": "Acheter Maintenant",
     "browseCollection": "Parcourir la Collection",
     "viewAll": "Voir Tous les Produits",
     "items": "articles"
   },
   "products": {
-    "title": "Meilleures Ventes",
-    "subtitle": "Nos pièces préférées des parents et des enfants",
+    "title": "Les Favoris des Mamans",
+    "subtitle": "Les pièces qui ont gagné l'admiration et la confiance des familles marocaines",
     "addToCart": "Ajouter au Panier",
     "quickView": "Aperçu Rapide",
     "viewDetails": "Voir les Détails",
@@ -65,7 +65,7 @@
     "clearFilters": "Effacer les Filtres",
     "categories": "Catégories",
     "priceRange": "Gamme de Prix",
-    "freeShipping": "Livraison gratuite sur les commandes de plus de 500 MAD !",
+    "freeShipping": "Livraison gratuite sur les commandes de plus de 500 DH !",
     "youMayAlsoLike": "Vous Aimerez Aussi",
     "relatedProducts": "Produits Similaires",
     "recentlyViewed": "Récemment Consultés"
@@ -78,54 +78,54 @@
     "description": "Description",
     "addToCart": "Ajouter au Panier",
     "buyNow": "Acheter Maintenant",
-    "orderWhatsApp": "Commander via WhatsApp",
-    "freeDelivery": "Livraison Gratuite",
-    "securePayment": "Paiement Sécurisé",
-    "easyReturns": "Retours Faciles",
+    "orderWhatsApp": "Commander via WhatsApp Maintenant",
+    "freeDelivery": "Livraison Rapide et Sûre",
+    "securePayment": "Paiement Sécurisé à la Livraison",
+    "easyReturns": "Retours Faciles et Confortables",
     "sizeGuide": "Guide des Tailles",
     "inStock": "En Stock",
     "outOfStock": "Rupture de Stock",
     "sku": "Référence",
-    "reviews": "Avis",
+    "reviews": "Avis des Mamans",
     "writeReview": "Écrire un Avis",
     "addToWishlist": "Ajouter aux Favoris",
     "removeFromWishlist": "Retirer des Favoris"
   },
   "features": {
-    "title": "Pourquoi les Parents Nous Aiment",
+    "title": "Pourquoi les Mamans Nous Font Confiance ?",
     "quality": {
-      "title": "Qualité Premium",
-      "description": "Tissus doux, sûrs et durables"
+      "title": "Qualité Inégalée",
+      "description": "Des tissus naturels doux qui offrent à votre enfant un câlin chaleureux toute la journée"
     },
     "delivery": {
-      "title": "Livraison Rapide",
-      "description": "Expédition rapide partout au Maroc"
+      "title": "Livraison à Domicile",
+      "description": "Nous vous livrons partout au Maroc avec une expédition ultra-rapide"
     },
     "returns": {
-      "title": "Retours Faciles",
-      "description": "Politique de retour sans tracas de 30 jours"
+      "title": "Votre Sérénité Compte",
+      "description": "Une politique de retour flexible pour une expérience d'achat sans souci"
     },
     "support": {
-      "title": "Support 24/7",
-      "description": "Toujours là pour vous aider"
+      "title": "Toujours à Vos Côtés",
+      "description": "Notre équipe est prête à répondre à vos questions avec amour et attention"
     }
   },
   "testimonials": {
-    "title": "Parents Heureux, Enfants Heureux",
-    "subtitle": "Ce que nos clients disent de nous"
+    "title": "Histoires Heureuses des Familles AKRENACE",
+    "subtitle": "Votre confiance est le secret de notre succès"
   },
   "cta": {
-    "title": "Prêt à Mettre à Jour Leur Garde-Robe ?",
-    "description": "Rejoignez des milliers de parents heureux et donnez à vos enfants le style qu'ils méritent",
-    "button": "Acheter Maintenant"
+    "title": "Prête à rafraîchir la garde-robe de votre enfant ?",
+    "description": "Rejoignez des milliers de mamans qui ont choisi l'excellence et la qualité",
+    "button": "Commencer vos Achats"
   },
   "footer": {
     "newsletter": {
-      "title": "Restez Informé",
-      "description": "Abonnez-vous pour recevoir des offres spéciales et des mises à jour",
-      "placeholder": "Entrez votre email",
+      "title": "Soyez la première informée",
+      "description": "Abonnez-vous pour recevoir nos dernières collections et offres exclusives",
+      "placeholder": "Votre email",
       "button": "S'abonner",
-      "success": "Merci pour votre abonnement !"
+      "success": "Merci de nous avoir rejoints !"
     },
     "links": {
       "shop": "Boutique",
@@ -137,66 +137,66 @@
     },
     "contact": {
       "title": "Contactez-Nous",
-      "phone": "+212 5XX-XXXXXX",
-      "email": "hello@akkids.ma",
+      "phone": "+212 700-720490",
+      "email": "hello@akrenace.ma",
       "address": "Casablanca, Maroc"
     },
     "social": {
-      "title": "Suivez-Nous"
+      "title": "Partagez les moments de votre enfant"
     },
-    "copyright": "© 2024 AK Kids. Tous droits réservés. Fait avec ❤️ au Maroc"
+    "copyright": "© 2026 AKRENACE. Tous droits réservés. Fait avec amour pour les mamans et les enfants au Maroc"
   },
   "cart": {
-    "title": "Panier d'Achat",
-    "empty": "Votre panier est vide",
+    "title": "Votre Panier",
+    "empty": "Votre panier est vide, votre enfant attend un cadeau !",
     "continueShopping": "Continuer les Achats",
     "subtotal": "Sous-total",
     "shipping": "Livraison",
-    "total": "Total",
-    "checkout": "Commander",
+    "total": "Total Final",
+    "checkout": "Commander Facilement",
     "remove": "Retirer",
     "quantity": "Quantité",
     "orderWhatsApp": "Commander via WhatsApp"
   },
   "checkout": {
-    "title": "Commander",
+    "title": "Une étape pour rendre votre enfant heureux",
     "deliveryInfo": "Informations de Livraison",
     "orderSummary": "Résumé de la Commande",
     "fullName": "Nom Complet",
     "phone": "Numéro de Téléphone",
     "email": "Email (Optionnel)",
-    "address": "Adresse de Livraison",
+    "address": "Adresse Domicile Détaillée",
     "city": "Ville",
     "notes": "Notes de Commande (Optionnel)",
-    "placeOrder": "Passer la Commande",
-    "processing": "Traitement...",
+    "placeOrder": "Confirmer la Commande",
+    "processing": "Préparation de votre commande avec amour...",
     "cashOnDelivery": "Paiement à la Livraison / WhatsApp",
-    "payOnReceive": "Payez lors de la réception de votre commande",
-    "secureOrder": "Commande Sécurisée",
+    "payOnReceive": "Payez à la réception et vérifiez la qualité vous-même",
+    "secureOrder": "Commande 100% Sécurisée",
     "fastDelivery": "Livraison Rapide",
-    "support": "Support 24/7",
-    "orderSuccess": "Commande Passée !",
-    "thankYou": "Merci pour votre commande. Nous vous contacterons bientôt pour confirmation.",
+    "support": "Support Continu",
+    "orderSuccess": "Commande reçue avec succès !",
+    "thankYou": "Merci de votre confiance en AKRENACE. Nous vous contacterons bientôt.",
     "orderId": "N° de Commande",
-    "freeShipping": "Livraison gratuite sur les commandes de plus de 500 MAD !",
+    "freeShipping": "Livraison gratuite sur les commandes de plus de 500 DH !",
     "required": "Obligatoire"
   },
   "wishlist": {
     "title": "Mes Favoris",
-    "empty": "Votre liste de favoris est vide",
+    "empty": "Votre liste est vide",
     "addToCart": "Ajouter au Panier",
     "remove": "Retirer",
     "moveToCart": "Déplacer vers le Panier"
   },
   "sizeGuide": {
-    "title": "Guide des Tailles",
+    "title": "Guide des Tailles pour le Confort de votre Enfant",
     "age": "Âge",
     "height": "Taille (cm)",
     "weight": "Poids (kg)",
     "chest": "Poitrine (cm)",
     "waist": "Taille (cm)",
-    "howToMeasure": "Comment Mesurer",
-    "measureDesc": "Pour de meilleurs résultats, mesurez votre enfant debout. Utilisez un ruban souple et gardez-le ajusté mais pas trop serré."
+    "howToMeasure": "Comment Mesurer Correctement",
+    "measureDesc": "Pour assurer le meilleur confort, mesurez votre enfant debout. Utilisez un ruban souple et laissez un peu d'espace pour respirer et jouer."
   },
   "admin": {
     "title": "Panneau d'Administration",
@@ -225,7 +225,7 @@
     "inStock": "En Stock",
     "outOfStock": "Rupture de Stock",
     "isNew": "Nouveau Produit",
-    "isSale": "En Promotion",
+    "isSale": "Offre Spéciale",
     "originalPrice": "Prix Original",
     "salePrice": "Prix Promo"
   },
