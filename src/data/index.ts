@@ -3,7 +3,7 @@ import type { Product, Category, Testimonial } from '@/types';
 export const products: Product[] = [
   {
     id: '1',
-    name: 'AK Classic Hoodie',
+    name: 'AKRENACE Classic Hoodie',
     price: 249,
     originalPrice: 299,
     image: '/product-hoodie.jpg',
@@ -15,7 +15,7 @@ export const products: Product[] = [
     category: 'boys',
     sizes: ['2-3Y', '4-5Y', '6-7Y', '8-9Y'],
     colors: ['Yellow', 'Blue', 'Red'],
-    description: 'Our signature AK Classic Hoodie is made from premium soft cotton blend, perfect for keeping your little ones warm and stylish. Features the iconic AK embroidered logo and a comfortable kangaroo pocket.',
+    description: 'Our signature AKRENACE Classic Hoodie is made from premium soft cotton blend, perfect for keeping your little ones warm and stylish. Features the iconic AKRENACE embroidered logo and a comfortable kangaroo pocket.',
     isSale: true,
     rating: 4.8,
     inStock: true,
@@ -107,7 +107,7 @@ export const products: Product[] = [
   },
   {
     id: '7',
-    name: 'AK Baby Onesie',
+    name: 'AKRENACE Baby Onesie',
     price: 99,
     image: '/hero-baby.png',
     images: [
@@ -116,7 +116,7 @@ export const products: Product[] = [
     category: 'baby',
     sizes: ['0-3M', '3-6M', '6-9M', '9-12M'],
     colors: ['Blue', 'Pink', 'White', 'Yellow'],
-    description: 'Soft and cozy onesie for your little one! Features envelope neckline for easy dressing, snap closures at the bottom, and the cute AK BABY print.',
+    description: 'Soft and cozy onesie for your little one! Features envelope neckline for easy dressing, snap closures at the bottom, and the cute AKRENACE print.',
     isNew: true,
     rating: 4.8,
     inStock: true,
@@ -124,7 +124,7 @@ export const products: Product[] = [
   },
   {
     id: '8',
-    name: 'AK Kids Set',
+    name: 'AKRENACE Kids Set',
     price: 349,
     image: '/hero-kid.png',
     images: [
@@ -240,7 +240,7 @@ export const testimonials: Testimonial[] = [
     name: 'Fatima Alami',
     avatar: '/testimonial-1.jpg',
     rating: 5,
-    text: 'AK Kids has become my go-to store for my children\'s clothes. The quality is amazing and the prices are so reasonable. My kids love their new outfits!',
+    text: 'AKRENACE has become my go-to store for my children\'s clothes. The quality is amazing and the prices are so reasonable. My kids love their new outfits!',
     location: 'Casablanca',
   },
   {
@@ -256,7 +256,7 @@ export const testimonials: Testimonial[] = [
     name: 'Sara El Amrani',
     avatar: '/testimonial-3.jpg',
     rating: 5,
-    text: 'I love how stylish and comfortable the clothes are. My daughter wears her AK dress everywhere! Will definitely be ordering more.',
+    text: 'I love how stylish and comfortable the clothes are. My daughter wears her AKRENACE dress everywhere! Will definitely be ordering more.',
     location: 'Marrakech',
   },
 ];
@@ -292,7 +292,7 @@ export const features = [
 export const WHATSAPP_CONFIG = {
   // Replace with your actual phone number (with country code, no + or spaces)
   // Example: 212612345678 for Moroccan number
-  phoneNumber: '2120700720490',
+  phoneNumber: '212700720490',
   // CallMeBot API Key (get from https://www.callmebot.com/blog/free-api-whatsapp-messages/)
   apiKey: '6752928',
 };
