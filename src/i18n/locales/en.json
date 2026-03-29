@@ -8,9 +8,9 @@
     "products": "Products"
   },
   "hero": {
-    "title": "AK KIDS",
-    "subtitle": "Morocco's Favorite Kids Fashion Destination",
-    "description": "Discover trendy, comfortable, and affordable clothing for your little ones. From playful outfits to cozy essentials, we've got everything to keep your kids stylish and happy!",
+    "title": "AKRENACE",
+    "subtitle": "Because Your Child Deserves Elegance That Touches the Heart",
+    "description": "At AKRENACE, we design clothes that tell a story of a happy childhood. We combine ultimate comfort and modern designs to accompany your children in every adventure, from their first step to their big dreams.",
     "ctaPrimary": "Shop Collection",
     "ctaSecondary": "Explore More",
     "newCollection": "New Collection",
@@ -19,20 +19,20 @@
     "rating": "Rating"
   },
   "about": {
-    "title": "Designed for Play, Made for Memories",
-    "description": "At AK Kids, we believe every child deserves to look and feel their best. Our clothes are crafted with love, using soft fabrics and durable stitches that keep up with every adventure—from playground fun to family gatherings.",
+    "title": "More Than Just Clothes.. They Are Memories Being Made",
+    "description": "We at AKRENACE realize that every piece of clothing your child wears is part of a beautiful memory. Therefore, we carefully choose the finest natural fabrics that embrace their skin softly, to give them the freedom to play and grow with love.",
     "features": {
-      "quality": "Premium Quality Fabrics",
-      "design": "Trendy Designs",
+      "quality": "Premium Natural Fabrics",
+      "design": "Designs Filled with Love",
       "comfort": "All-Day Comfort"
     },
-    "cta": "Read Our Story",
-    "badge": "About AK Kids",
-    "years": "Years of Excellence"
+    "cta": "Discover Our Story",
+    "badge": "About AKRENACE",
+    "years": "Years of Trust"
   },
   "categories": {
-    "title": "Shop by Category",
-    "subtitle": "Find the perfect style for your little ones",
+    "title": "Shop for Your Child with Love",
+    "subtitle": "Choose the elegance that suits your child's unique personality",
     "baby": "Baby",
     "boys": "Boys",
     "girls": "Girls",
@@ -40,11 +40,11 @@
     "shopNow": "Shop Now",
     "browseCollection": "Browse Collection",
     "viewAll": "View All Products",
-    "items": "items"
+    "items": "Items"
   },
   "products": {
-    "title": "Best Sellers",
-    "subtitle": "Our most loved pieces by parents and kids",
+    "title": "Mother's Favorites",
+    "subtitle": "The pieces that have won the admiration and trust of Moroccan families",
     "addToCart": "Add to Cart",
     "quickView": "Quick View",
     "viewDetails": "View Details",
@@ -54,7 +54,7 @@
     "allProducts": "All Products",
     "search": "Search products...",
     "filter": "Filter",
-    "sortBy": "Sort By",
+    "sortBy": "Sort by",
     "newest": "Newest First",
     "priceAsc": "Price: Low to High",
     "priceDesc": "Price: High to Low",
@@ -65,7 +65,7 @@
     "clearFilters": "Clear Filters",
     "categories": "Categories",
     "priceRange": "Price Range",
-    "freeShipping": "Free shipping on orders over 500 MAD!",
+    "freeShipping": "Free shipping on orders over 500 DH!",
     "youMayAlsoLike": "You May Also Like",
     "relatedProducts": "Related Products",
     "recentlyViewed": "Recently Viewed"
@@ -78,107 +78,107 @@
     "description": "Description",
     "addToCart": "Add to Cart",
     "buyNow": "Buy Now",
-    "orderWhatsApp": "Order via WhatsApp",
-    "freeDelivery": "Free Delivery",
-    "securePayment": "Secure Payment",
-    "easyReturns": "Easy Returns",
+    "orderWhatsApp": "Order via WhatsApp Now",
+    "freeDelivery": "Fast & Secure Delivery",
+    "securePayment": "Secure Cash on Delivery",
+    "easyReturns": "Easy & Comfortable Returns",
     "sizeGuide": "Size Guide",
     "inStock": "In Stock",
     "outOfStock": "Out of Stock",
     "sku": "SKU",
-    "reviews": "Reviews",
+    "reviews": "Mother's Reviews",
     "writeReview": "Write a Review",
     "addToWishlist": "Add to Wishlist",
     "removeFromWishlist": "Remove from Wishlist"
   },
   "features": {
-    "title": "Why Parents Love Us",
+    "title": "Why Do Mothers Trust Us?",
     "quality": {
-      "title": "Premium Quality",
-      "description": "Soft, safe, and durable fabrics that last"
+      "title": "Unmatched Quality",
+      "description": "Soft natural fabrics that give your child a warm hug all day long"
     },
     "delivery": {
-      "title": "Fast Delivery",
-      "description": "Quick shipping all over Morocco"
+      "title": "Door-to-Door Delivery",
+      "description": "We reach you wherever you are in Morocco with super-fast shipping"
     },
     "returns": {
-      "title": "Easy Returns",
-      "description": "30-day hassle-free return policy"
+      "title": "Your Peace of Mind Matters",
+      "description": "A flexible return policy that ensures a worry-free shopping experience"
     },
     "support": {
-      "title": "24/7 Support",
-      "description": "Always here to help you"
+      "title": "Always by Your Side",
+      "description": "Our team is ready to answer your questions with love and care"
     }
   },
   "testimonials": {
-    "title": "Happy Parents, Happy Kids",
-    "subtitle": "What our customers say about us"
+    "title": "Happy Stories from AKRENACE Families",
+    "subtitle": "Your trust is the secret of our success and continuity"
   },
   "cta": {
-    "title": "Ready to Upgrade Their Wardrobe?",
-    "description": "Join thousands of happy parents and give your kids the style they deserve",
-    "button": "Shop Now"
+    "title": "Ready to Refresh Your Child's Wardrobe?",
+    "description": "Join thousands of mothers who chose excellence and quality for their children",
+    "button": "Start Shopping Now"
   },
   "footer": {
     "newsletter": {
-      "title": "Stay Updated",
-      "description": "Subscribe to get special offers and updates",
+      "title": "Be the First to Know",
+      "description": "Subscribe to receive our latest collections and exclusive offers for mothers",
       "placeholder": "Enter your email",
       "button": "Subscribe",
-      "success": "Thank you for subscribing!"
+      "success": "Thank you for joining us!"
     },
     "links": {
       "shop": "Shop",
       "about": "About Us",
-      "contact": "Contact",
+      "contact": "Contact Us",
       "faq": "FAQ",
       "shipping": "Shipping Info",
-      "returns": "Returns Policy"
+      "returns": "Return Policy"
     },
     "contact": {
       "title": "Contact Us",
-      "phone": "+212 5XX-XXXXXX",
-      "email": "hello@akkids.ma",
+      "phone": "+212 700-720490",
+      "email": "hello@akrenace.ma",
       "address": "Casablanca, Morocco"
     },
     "social": {
-      "title": "Follow Us"
+      "title": "Share Your Child's Moments"
     },
-    "copyright": "© 2024 AK Kids. All rights reserved. Made with ❤️ in Morocco"
+    "copyright": "© 2026 AKRENACE. All rights reserved. Made with love for mothers and children in Morocco"
   },
   "cart": {
-    "title": "Shopping Cart",
-    "empty": "Your cart is empty",
+    "title": "Your Shopping Cart",
+    "empty": "Your cart is empty, your child is waiting for a gift!",
     "continueShopping": "Continue Shopping",
     "subtotal": "Subtotal",
     "shipping": "Shipping",
     "total": "Total",
-    "checkout": "Checkout",
+    "checkout": "Checkout Easily",
     "remove": "Remove",
     "quantity": "Quantity",
     "orderWhatsApp": "Order via WhatsApp"
   },
   "checkout": {
-    "title": "Checkout",
+    "title": "One Step to Make Your Child Happy",
     "deliveryInfo": "Delivery Information",
     "orderSummary": "Order Summary",
     "fullName": "Full Name",
     "phone": "Phone Number",
     "email": "Email (Optional)",
-    "address": "Delivery Address",
+    "address": "Detailed Home Address",
     "city": "City",
     "notes": "Order Notes (Optional)",
-    "placeOrder": "Place Order",
-    "processing": "Processing...",
-    "cashOnDelivery": "Cash on Delivery / WhatsApp",
-    "payOnReceive": "Pay when you receive your order",
-    "secureOrder": "Secure Order",
+    "placeOrder": "Confirm Order Now",
+    "processing": "Preparing your order with love...",
+    "cash On Delivery": "Cash on Delivery / WhatsApp",
+    "payOnReceive": "Pay when you receive your order and check the quality yourself",
+    "secureOrder": "100% Secure Order",
     "fastDelivery": "Fast Delivery",
-    "support": "24/7 Support",
-    "orderSuccess": "Order Placed!",
-    "thankYou": "Thank you for your order. We'll contact you soon to confirm.",
+    "support": "Continuous Support",
+    "orderSuccess": "Order placed successfully!",
+    "thankYou": "Thank you for trusting AKRENACE. We will contact you soon to confirm.",
     "orderId": "Order ID",
-    "freeShipping": "Free shipping on orders over 500 MAD!",
+    "freeShipping": "Free shipping on orders over 500 DH!",
     "required": "Required"
   },
   "wishlist": {
@@ -189,14 +189,14 @@
     "moveToCart": "Move to Cart"
   },
   "sizeGuide": {
-    "title": "Size Guide",
+    "title": "Size Guide for Your Child's Comfort",
     "age": "Age",
     "height": "Height (cm)",
     "weight": "Weight (kg)",
     "chest": "Chest (cm)",
     "waist": "Waist (cm)",
-    "howToMeasure": "How to Measure",
-    "measureDesc": "For best results, measure your child while they are standing. Use a soft measuring tape and keep it snug but not tight."
+    "howToMeasure": "How to Measure Correctly",
+    "measureDesc": "To ensure the best comfort for your child, measure them while they are standing in a relaxed position. Use a soft measuring tape and leave a little room for breathing and playing."
   },
   "admin": {
     "title": "Admin Panel",
@@ -225,7 +225,7 @@
     "inStock": "In Stock",
     "outOfStock": "Out of Stock",
     "isNew": "New Product",
-    "isSale": "On Sale",
+    "isSale": "Special Offer",
     "originalPrice": "Original Price",
     "salePrice": "Sale Price"
   },
