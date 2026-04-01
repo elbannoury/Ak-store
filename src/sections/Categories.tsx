@@ -1,11 +1,12 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { categories } from '@/data';
+import { categories as initialCategories, products as initialProducts } from '@/data';
 import { Button } from '@/components/ui/button';
+import type { Product } from '@/types';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -14,6 +15,32 @@ const Categories = () => {
   const navigate = useNavigate();
   const sectionRef = useRef<HTMLElement>(null);
   const cardsRef = useRef<HTMLDivElement>(null);
+  const [categories, setCategories] = useState(initialCategories);
+
+  const calculateCounts = () => {
+    const savedProducts = localStorage.getItem('ak-products');
+    const products: Product[] = savedProducts ? JSON.parse(savedProducts) : initialProducts;
+    
+    const updatedCategories = initialCategories.map(cat => ({
+      ...cat,
+      itemCount: products.filter(p => p.category === cat.id).length
+    }));
+    
+    setCategories(updatedCategories);
+  };
+
+  useEffect(() => {
+    calculateCounts();
+
+    const handleProductsUpdated = () => {
+      calculateCounts();
+    };
+
+    window.addEventListener('productsUpdated', handleProductsUpdated);
+    return () => {
+      window.removeEventListener('productsUpdated', handleProductsUpdated);
+    };
+  }, []);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -125,7 +152,7 @@ const Categories = () => {
                         {t(`categories.${category.id}`)}
                       </h3>
                       <p className="text-white/70 text-sm">
-                        {category.itemCount} items
+                        {category.itemCount} {t('categories.items')}
                       </p>
                     </div>
 
@@ -156,7 +183,7 @@ const Categories = () => {
             onClick={handleViewAllProducts}
             className="btn-secondary inline-flex items-center gap-2 group"
           >
-            View All Products
+            {t('categories.viewAll')}
             <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
           </Button>
         </div>
