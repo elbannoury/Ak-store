@@ -7,7 +7,7 @@ import {
   Eye, 
   ArrowRight 
 } from 'lucide-react';
-import { products } from '@/data';
+import { products as initialProducts } from '@/data';
 import { useCartStore } from '@/store/cartStore';
 import {
   Dialog,
@@ -19,6 +19,7 @@ import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import type { Product } from '@/types';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -28,7 +29,30 @@ const Products = () => {
   const { addItem } = useCartStore();
   const sectionRef = useRef<HTMLElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
-  const [selectedProduct, setSelectedProduct] = useState<typeof products[0] | null>(null);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [products, setProducts] = useState<Product[]>([]);
+
+  const loadProducts = () => {
+    const savedProducts = localStorage.getItem('ak-products');
+    if (savedProducts) {
+      setProducts(JSON.parse(savedProducts));
+    } else {
+      setProducts(initialProducts);
+    }
+  };
+
+  useEffect(() => {
+    loadProducts();
+
+    const handleProductsUpdated = () => {
+      loadProducts();
+    };
+
+    window.addEventListener('productsUpdated', handleProductsUpdated);
+    return () => {
+      window.removeEventListener('productsUpdated', handleProductsUpdated);
+    };
+  }, []);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -55,15 +79,15 @@ const Products = () => {
     }, sectionRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [products]); // Re-run animation when products change
 
-  const handleAddToCart = (product: typeof products[0], e?: React.MouseEvent) => {
+  const handleAddToCart = (product: Product, e?: React.MouseEvent) => {
     e?.stopPropagation();
     addItem({
       id: product.id,
       name: product.name,
       price: product.price,
-      image: product.image,
+      image: product.image || (product.images && product.images[0]) || '',
       category: product.category,
     });
     toast.success(`${product.name} ${t('products.addToCart')}`);
@@ -121,7 +145,7 @@ const Products = () => {
                 {/* Image Container */}
                 <div className="relative h-48 sm:h-64 overflow-hidden bg-white">
                   <img
-                    src={product.image}
+                    src={product.image || (product.images && product.images[0])}
                     alt={product.name}
                     className="w-full h-full object-cover transition-transform duration-700 
                              group-hover:scale-110"
@@ -230,7 +254,7 @@ const Products = () => {
             <div className="grid sm:grid-cols-2 gap-6">
               <div className="rounded-2xl overflow-hidden bg-white">
                 <img
-                  src={selectedProduct.image}
+                  src={selectedProduct.image || (selectedProduct.images && selectedProduct.images[0])}
                   alt={selectedProduct.name}
                   className="w-full h-64 object-cover"
                 />
