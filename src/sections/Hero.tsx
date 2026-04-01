@@ -1,8 +1,9 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { products as initialProducts } from '@/data';
 import gsap from 'gsap';
 
 const Hero = () => {
@@ -13,6 +14,26 @@ const Hero = () => {
   const kidImageRef = useRef<HTMLDivElement>(null);
   const babyImageRef = useRef<HTMLDivElement>(null);
   const shapesRef = useRef<HTMLDivElement>(null);
+  const [productCount, setProductCount] = useState(initialProducts.length);
+
+  useEffect(() => {
+    const savedProducts = localStorage.getItem('ak-products');
+    if (savedProducts) {
+      setProductCount(JSON.parse(savedProducts).length);
+    }
+
+    const handleProductsUpdated = () => {
+      const updatedProducts = localStorage.getItem('ak-products');
+      if (updatedProducts) {
+        setProductCount(JSON.parse(updatedProducts).length);
+      }
+    };
+
+    window.addEventListener('productsUpdated', handleProductsUpdated);
+    return () => {
+      window.removeEventListener('productsUpdated', handleProductsUpdated);
+    };
+  }, []);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -266,17 +287,17 @@ const Hero = () => {
             <div className="flex items-center justify-center gap-8 mt-12">
               <div className="text-center">
                 <p className="text-3xl font-bold text-[#f6b638]">10K+</p>
-                <p className="text-sm text-[#211e0f]/60">Happy Kids</p>
+                <p className="text-sm text-[#211e0f]/60">{t('hero.happyKids')}</p>
               </div>
               <div className="w-px h-12 bg-[#f6b638]/30" />
               <div className="text-center">
-                <p className="text-3xl font-bold text-[#f6b638]">200+</p>
-                <p className="text-sm text-[#211e0f]/60">Products</p>
+                <p className="text-3xl font-bold text-[#f6b638]">{productCount}+</p>
+                <p className="text-sm text-[#211e0f]/60">{t('hero.products')}</p>
               </div>
               <div className="w-px h-12 bg-[#f6b638]/30" />
               <div className="text-center">
                 <p className="text-3xl font-bold text-[#f6b638]">4.9</p>
-                <p className="text-sm text-[#211e0f]/60">Rating</p>
+                <p className="text-sm text-[#211e0f]/60">{t('hero.rating')}</p>
               </div>
             </div>
           </div>
