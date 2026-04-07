@@ -20,6 +20,7 @@ import { toast } from 'sonner';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import type { Product } from '@/types';
+import { supabase } from '@/lib/supabaseClient';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -31,13 +32,31 @@ const Products = () => {
   const gridRef = useRef<HTMLDivElement>(null);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const loadProducts = () => {
-    const savedProducts = localStorage.getItem('ak-products');
-    if (savedProducts) {
-      setProducts(JSON.parse(savedProducts));
-    } else {
-      setProducts(initialProducts);
+  const loadProducts = async () => {
+    setIsLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      if (data && data.length > 0) {
+        setProducts(data as Product[]);
+        localStorage.setItem('ak-products', JSON.stringify(data));
+      } else {
+        const savedProducts = localStorage.getItem('ak-products');
+        setProducts(savedProducts ? JSON.parse(savedProducts) : initialProducts);
+      }
+    } catch (error) {
+      console.error('Failed to load products:', error);
+      const savedProducts = localStorage.getItem('ak-products');
+      setProducts(savedProducts ? JSON.parse(savedProducts) : initialProducts);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -55,6 +74,8 @@ const Products = () => {
   }, []);
 
   useEffect(() => {
+    if (isLoading) return;
+
     const ctx = gsap.context(() => {
       const items = gridRef.current?.querySelectorAll('.product-card');
       if (items) {
@@ -79,7 +100,7 @@ const Products = () => {
     }, sectionRef);
 
     return () => ctx.revert();
-  }, [products]); // Re-run animation when products change
+  }, [products, isLoading]);
 
   const handleAddToCart = (product: Product, e?: React.MouseEvent) => {
     e?.stopPropagation();
@@ -127,108 +148,117 @@ const Products = () => {
           </p>
         </div>
 
-        {/* Products Grid - 4 columns on desktop, 2 on mobile */}
-        <div
-          ref={gridRef}
-          className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6"
-        >
-          {products.slice(0, 8).map((product) => (
-            <div
-              key={product.id}
-              className="product-card group"
-            >
-              <div 
-                className="relative bg-[#fff9ed] rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg 
-                          hover:shadow-2xl transition-all duration-500 cursor-pointer"
-                onClick={() => handleViewProduct(product.id)}
+        {/* Loading State */}
+        {isLoading && (
+          <div className="flex justify-center items-center py-20">
+            <div className="w-12 h-12 border-4 border-[#f6b638] border-t-transparent rounded-full animate-spin"></div>
+          </div>
+        )}
+
+        {/* Products Grid */}
+        {!isLoading && (
+          <div
+            ref={gridRef}
+            className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6"
+          >
+            {products.slice(0, 8).map((product) => (
+              <div
+                key={product.id}
+                className="product-card group"
               >
-                {/* Image Container */}
-                <div className="relative h-48 sm:h-64 overflow-hidden bg-white">
-                  <img
-                    src={product.image || (product.images && product.images[0])}
-                    alt={product.name}
-                    className="w-full h-full object-cover transition-transform duration-700 
-                             group-hover:scale-110"
-                  />
+                <div 
+                  className="relative bg-[#fff9ed] rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg 
+                            hover:shadow-2xl transition-all duration-500 cursor-pointer"
+                  onClick={() => handleViewProduct(product.id)}
+                >
+                  {/* Image Container */}
+                  <div className="relative h-48 sm:h-64 overflow-hidden bg-white">
+                    <img
+                      src={product.image || (product.images && product.images[0])}
+                      alt={product.name}
+                      className="w-full h-full object-cover transition-transform duration-700 
+                               group-hover:scale-110"
+                    />
 
-                  {/* Badges */}
-                  <div className="absolute top-2 sm:top-4 left-2 sm:left-4 flex flex-col gap-1 sm:gap-2">
-                    {product.isNew && (
-                      <span className="px-2 sm:px-3 py-0.5 sm:py-1 bg-[#4ade80] text-white text-xs font-bold rounded-full">
-                        {t('products.new')}
-                      </span>
-                    )}
-                    {product.isSale && (
-                      <span className="px-2 sm:px-3 py-0.5 sm:py-1 bg-[#f87171] text-white text-xs font-bold rounded-full">
-                        {t('products.sale')}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Quick Actions */}
-                  <div className="absolute top-2 sm:top-4 right-2 sm:right-4 flex flex-col gap-1 sm:gap-2 
-                                opacity-0 group-hover:opacity-100 transform translate-x-2 sm:translate-x-4 
-                                group-hover:translate-x-0 transition-all duration-500">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSelectedProduct(product);
-                      }}
-                      className="w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-full flex items-center justify-center
-                               shadow-lg hover:bg-[#f6b638] transition-colors duration-300"
-                    >
-                      <Eye className="w-4 h-4 sm:w-5 sm:h-5 text-[#211e0f]" />
-                    </button>
-                  </div>
-
-                  {/* Add to Cart Button - Slides up on hover */}
-                  <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-4 
-                                transform translate-y-full group-hover:translate-y-0 
-                                transition-transform duration-500">
-                    <button
-                      onClick={(e) => handleAddToCart(product, e)}
-                      className="w-full bg-[#f6b638] hover:bg-[#f58a1f] text-[#211e0f] font-bold 
-                               py-2 sm:py-3 rounded-xl flex items-center justify-center gap-1 sm:gap-2 
-                               transition-colors duration-300 text-sm sm:text-base"
-                    >
-                      <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5" />
-                      <span className="hidden sm:inline">{t('products.addToCart')}</span>
-                      <span className="sm:hidden">{t('cart.addToCart')}</span>
-                    </button>
-                  </div>
-                </div>
-
-                {/* Product Info */}
-                <div className="p-3 sm:p-5">
-                  <div className="flex items-start justify-between mb-1 sm:mb-2">
-                    <h3 className="font-bold text-[#211e0f] text-sm sm:text-base group-hover:text-[#f58a1f] 
-                                 transition-colors duration-300 line-clamp-1">
-                      {product.name}
-                    </h3>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1 sm:gap-2">
-                      <span className="text-base sm:text-xl font-bold text-[#f58a1f]">
-                        {product.price} MAD
-                      </span>
-                      {product.originalPrice && (
-                        <span className="text-xs sm:text-sm text-[#211e0f]/40 line-through">
-                          {product.originalPrice} MAD
+                    {/* Badges */}
+                    <div className="absolute top-2 sm:top-4 left-2 sm:left-4 flex flex-col gap-1 sm:gap-2">
+                      {product.isNew && (
+                        <span className="px-2 sm:px-3 py-0.5 sm:py-1 bg-[#4ade80] text-white text-xs font-bold rounded-full">
+                          {t('products.new')}
+                        </span>
+                      )}
+                      {product.isSale && (
+                        <span className="px-2 sm:px-3 py-0.5 sm:py-1 bg-[#f87171] text-white text-xs font-bold rounded-full">
+                          {t('products.sale')}
                         </span>
                       )}
                     </div>
-                    {product.rating && (
-                      <div className="flex items-center gap-0.5 sm:gap-1">
-                        <Star className="w-3 h-3 sm:w-4 sm:h-4 text-[#f6b638] fill-[#f6b638]" />
-                        <span className="text-xs sm:text-sm text-[#211e0f]/60">{product.rating}</span>
+
+                    {/* Quick Actions */}
+                    <div className="absolute top-2 sm:top-4 right-2 sm:right-4 flex flex-col gap-1 sm:gap-2 
+                                  opacity-0 group-hover:opacity-100 transform translate-x-2 sm:translate-x-4 
+                                  group-hover:translate-x-0 transition-all duration-500">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedProduct(product);
+                        }}
+                        className="w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-full flex items-center justify-center
+                                 shadow-lg hover:bg-[#f6b638] transition-colors duration-300"
+                      >
+                        <Eye className="w-4 h-4 sm:w-5 sm:h-5 text-[#211e0f]" />
+                      </button>
+                    </div>
+
+                    {/* Add to Cart Button */}
+                    <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-4 
+                                  transform translate-y-full group-hover:translate-y-0 
+                                  transition-transform duration-500">
+                      <button
+                        onClick={(e) => handleAddToCart(product, e)}
+                        className="w-full bg-[#f6b638] hover:bg-[#f58a1f] text-[#211e0f] font-bold 
+                                 py-2 sm:py-3 rounded-xl flex items-center justify-center gap-1 sm:gap-2 
+                                 transition-colors duration-300 text-sm sm:text-base"
+                      >
+                        <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5" />
+                        <span className="hidden sm:inline">{t('products.addToCart')}</span>
+                        <span className="sm:hidden">{t('cart.addToCart')}</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Product Info */}
+                  <div className="p-3 sm:p-5">
+                    <div className="flex items-start justify-between mb-1 sm:mb-2">
+                      <h3 className="font-bold text-[#211e0f] text-sm sm:text-base group-hover:text-[#f58a1f] 
+                                   transition-colors duration-300 line-clamp-1">
+                        {product.name}
+                      </h3>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-1 sm:gap-2">
+                        <span className="text-base sm:text-xl font-bold text-[#f58a1f]">
+                          {product.price} MAD
+                        </span>
+                        {product.originalPrice && (
+                          <span className="text-xs sm:text-sm text-[#211e0f]/40 line-through">
+                            {product.originalPrice} MAD
+                          </span>
+                        )}
                       </div>
-                    )}
+                      {product.rating && (
+                        <div className="flex items-center gap-0.5 sm:gap-1">
+                          <Star className="w-3 h-3 sm:w-4 sm:h-4 text-[#f6b638] fill-[#f6b638]" />
+                          <span className="text-xs sm:text-sm text-[#211e0f]/60">{product.rating}</span>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
 
         {/* View All Button */}
         <div className="text-center mt-12">
