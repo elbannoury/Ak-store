@@ -7,6 +7,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { categories as initialCategories, products as initialProducts } from '@/data';
 import { Button } from '@/components/ui/button';
 import type { Product } from '@/types';
+import { supabase } from '@/lib/supabaseClient';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -17,16 +18,37 @@ const Categories = () => {
   const cardsRef = useRef<HTMLDivElement>(null);
   const [categories, setCategories] = useState(initialCategories);
 
-  const calculateCounts = () => {
-    const savedProducts = localStorage.getItem('ak-products');
-    const products: Product[] = savedProducts ? JSON.parse(savedProducts) : initialProducts;
-    
-    const updatedCategories = initialCategories.map(cat => ({
-      ...cat,
-      itemCount: products.filter(p => p.category === cat.id).length
-    }));
-    
-    setCategories(updatedCategories);
+  const calculateCounts = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('products')
+        .select('category');
+
+      if (error) throw error;
+
+      let products: Partial<Product>[] = data || [];
+      
+      if (products.length === 0) {
+        const savedProducts = localStorage.getItem('ak-products');
+        products = savedProducts ? JSON.parse(savedProducts) : initialProducts;
+      }
+      
+      const updatedCategories = initialCategories.map(cat => ({
+        ...cat,
+        itemCount: products.filter(p => p.category === cat.id).length
+      }));
+      
+      setCategories(updatedCategories);
+    } catch (error) {
+      console.error('Error calculating category counts:', error);
+      const savedProducts = localStorage.getItem('ak-products');
+      const products = savedProducts ? JSON.parse(savedProducts) : initialProducts;
+      const updatedCategories = initialCategories.map(cat => ({
+        ...cat,
+        itemCount: products.filter(p => p.category === cat.id).length
+      }));
+      setCategories(updatedCategories);
+    }
   };
 
   useEffect(() => {
