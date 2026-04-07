@@ -5,6 +5,7 @@ import { ArrowRight, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { products as initialProducts } from '@/data';
 import gsap from 'gsap';
+import { supabase } from '@/lib/supabaseClient';
 
 const Hero = () => {
   const { t } = useTranslation();
@@ -16,17 +17,32 @@ const Hero = () => {
   const shapesRef = useRef<HTMLDivElement>(null);
   const [productCount, setProductCount] = useState(initialProducts.length);
 
-  useEffect(() => {
-    const savedProducts = localStorage.getItem('ak-products');
-    if (savedProducts) {
-      setProductCount(JSON.parse(savedProducts).length);
+  const loadCount = async () => {
+    try {
+      const { count, error } = await supabase
+        .from('products')
+        .select('*', { count: 'exact', head: true });
+
+      if (error) throw error;
+
+      if (count !== null && count > 0) {
+        setProductCount(count);
+      } else {
+        const savedProducts = localStorage.getItem('ak-products');
+        if (savedProducts) {
+          setProductCount(JSON.parse(savedProducts).length);
+        }
+      }
+    } catch (error) {
+      console.error('Error loading product count:', error);
     }
+  };
+
+  useEffect(() => {
+    loadCount();
 
     const handleProductsUpdated = () => {
-      const updatedProducts = localStorage.getItem('ak-products');
-      if (updatedProducts) {
-        setProductCount(JSON.parse(updatedProducts).length);
-      }
+      loadCount();
     };
 
     window.addEventListener('productsUpdated', handleProductsUpdated);
