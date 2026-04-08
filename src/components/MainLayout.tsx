@@ -29,7 +29,7 @@ export default function MainLayout({ children, showCartDrawer = true }: MainLayo
       {showCartDrawer && <CartDrawer />}
 
       {/* Main Content */}
-      <main className="flex-1">
+      <main className="flex-1 pt-20">
         {children}
       </main>
 

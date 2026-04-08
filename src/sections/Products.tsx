@@ -7,8 +7,8 @@ import {
   Eye, 
   ArrowRight 
 } from 'lucide-react';
-import { products as initialProducts } from '@/data';
 import { useCartStore } from '@/store/cartStore';
+import { useProducts } from '@/hooks/useProducts';
 import {
   Dialog,
   DialogContent,
@@ -20,7 +20,6 @@ import { toast } from 'sonner';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import type { Product } from '@/types';
-import { supabase } from '@/lib/supabaseClient';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -31,47 +30,7 @@ const Products = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const [products, setProducts] = useState<Product[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  const loadProducts = async () => {
-    setIsLoading(true);
-    try {
-      const { data, error } = await supabase
-        .from('products')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-
-      if (data && data.length > 0) {
-        setProducts(data as Product[]);
-        localStorage.setItem('ak-products', JSON.stringify(data));
-      } else {
-        const savedProducts = localStorage.getItem('ak-products');
-        setProducts(savedProducts ? JSON.parse(savedProducts) : initialProducts);
-      }
-    } catch (error) {
-      console.error('Failed to load products:', error);
-      const savedProducts = localStorage.getItem('ak-products');
-      setProducts(savedProducts ? JSON.parse(savedProducts) : initialProducts);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    loadProducts();
-
-    const handleProductsUpdated = () => {
-      loadProducts();
-    };
-
-    window.addEventListener('productsUpdated', handleProductsUpdated);
-    return () => {
-      window.removeEventListener('productsUpdated', handleProductsUpdated);
-    };
-  }, []);
+  const { products, isLoading } = useProducts();
 
   useEffect(() => {
     if (isLoading) return;

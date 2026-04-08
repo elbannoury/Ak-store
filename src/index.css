@@ -153,3 +153,71 @@ body {
 .cart-item-animate {
   animation: slideIn 0.3s ease-out forwards;
 }
+
+/* Fixed Navigation z-index hierarchy */
+nav {
+  z-index: 50;
+}
+
+/* Page headers below fixed navigation */
+.sticky {
+  z-index: 40;
+}
+
+/* Modals on top */
+.modal {
+  z-index: 100;
+}
+
+/* Ensure main content respects fixed navbar */
+main {
+  scroll-behavior: smooth;
+}
+
+/* Smooth scrolling for anchor links */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Fix for RTL text alignment in forms */
+[dir="rtl"] input,
+[dir="rtl"] textarea,
+[dir="rtl"] select {
+  text-align: right;
+}
+
+[dir="ltr"] input,
+[dir="ltr"] textarea,
+[dir="ltr"] select {
+  text-align: left;
+}
+
+/* Improve button hover states */
+button {
+  @apply transition-all duration-300;
+}
+
+/* Loading spinner animation */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Fade in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}

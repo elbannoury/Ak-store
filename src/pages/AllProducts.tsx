@@ -14,6 +14,7 @@ import {
 import MainLayout from '@/components/MainLayout';
 import { categories } from '@/data';
 import { useCartStore } from '@/store/cartStore';
+import { useProducts } from '@/hooks/useProducts';
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -25,8 +26,8 @@ const AllProducts = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { addItem, getTotalItems, toggleCart } = useCartStore();
+  const { products, isLoading } = useProducts();
 
-  const [products, setProducts] = useState<Product[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>(searchParams.get('category') || 'all');
@@ -43,35 +44,6 @@ const AllProducts = () => {
     }, 300);
     return () => clearTimeout(timer);
   }, [searchQuery]);
-
-  // Load products
-  useEffect(() => {
-    const loadProducts = () => {
-      const savedProducts = localStorage.getItem('ak-products');
-      if (savedProducts) {
-        setProducts(JSON.parse(savedProducts));
-      } else {
-        // Import initial products if none saved
-        import('@/data').then(({ products: initialProducts }) => {
-          setProducts(initialProducts);
-          // Save to localStorage for future use
-          localStorage.setItem('ak-products', JSON.stringify(initialProducts));
-        });
-      }
-    };
-
-    loadProducts();
-
-    // Listen for product updates
-    const handleProductsUpdated = () => {
-      loadProducts();
-    };
-    window.addEventListener('productsUpdated', handleProductsUpdated);
-
-    return () => {
-      window.removeEventListener('productsUpdated', handleProductsUpdated);
-    };
-  }, []);
 
   // Filter and sort products
   const filteredProducts = useMemo(() => {
@@ -141,9 +113,9 @@ const AllProducts = () => {
 
   return (
     <MainLayout showCartDrawer={false}>
-    <div className="min-h-screen bg-[#fff9ed]">
+    <div className="min-h-screen bg-[#fff9ed] pt-24">
       {/* Header */}
-      <div className="sticky top-0 z-40 bg-white/90 backdrop-blur-lg shadow-sm">
+      <div className="sticky top-24 z-40 bg-white/90 backdrop-blur-lg shadow-sm">
         <div className="w-full section-padding py-4">
           <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
             {/* Logo */}
@@ -271,226 +243,200 @@ const AllProducts = () => {
                   <List className="w-4 h-4" />
                 </button>
               </div>
-
-              {/* Clear Filters */}
-              {hasActiveFilters && (
-                <button
-                  onClick={clearFilters}
-                  className="flex items-center gap-1 px-3 py-2 text-sm text-red-500 hover:bg-red-50 rounded-full transition-colors"
-                >
-                  <X className="w-4 h-4" />
-                  {t('products.clearFilters')}
-                </button>
-              )}
             </div>
           </div>
         </div>
       </div>
 
-      {/* Price Filter Panel - Desktop */}
-      {showFilters && (
-        <div className="hidden lg:block bg-white border-b">
-          <div className="w-full section-padding py-4">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-              <span className="font-semibold text-[#211e0f]">{t('products.priceRange')}:</span>
-              <div className="flex items-center gap-4 flex-1">
-                <input
-                  type="range"
-                  min="0"
-                  max="1000"
-                  value={priceRange[1]}
-                  onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
-                  className="flex-1 accent-[#f6b638]"
-                />
-                <span className="text-sm text-gray-600 whitespace-nowrap">
-                  0 - {priceRange[1]} MAD
-                </span>
+      {/* Main Content */}
+      <div className="w-full section-padding py-8">
+        {/* Loading State */}
+        {isLoading ? (
+          <div className="flex justify-center items-center py-20">
+            <div className="w-12 h-12 border-4 border-[#f6b638] border-t-transparent rounded-full animate-spin"></div>
+          </div>
+        ) : (
+          <>
+            {/* Results Info */}
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <p className="text-gray-600">
+                  {filteredProducts.length} {filteredProducts.length === 1 ? 'product' : 'products'} found
+                </p>
+                {hasActiveFilters && (
+                  <button
+                    onClick={clearFilters}
+                    className="text-[#f6b638] hover:text-[#f58a1f] text-sm mt-2"
+                  >
+                    Clear filters
+                  </button>
+                )}
               </div>
             </div>
-          </div>
-        </div>
-      )}
+
+            {/* Products Grid/List */}
+            {filteredProducts.length > 0 ? (
+              <div className={viewMode === 'grid' ? 'grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6' : 'space-y-4'}>
+                {filteredProducts.map((product) => (
+                  <div
+                    key={product.id}
+                    className={viewMode === 'grid' ? 'product-card group' : 'flex gap-4 bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow'}
+                    onClick={() => navigate(`/product/${product.id}`)}
+                  >
+                    {/* Grid View */}
+                    {viewMode === 'grid' && (
+                      <div 
+                        className="relative bg-[#fff9ed] rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg 
+                                  hover:shadow-2xl transition-all duration-500 cursor-pointer"
+                      >
+                        {/* Image Container */}
+                        <div className="relative h-48 sm:h-64 overflow-hidden bg-white">
+                          <img
+                            src={product.image || (product.images && product.images[0])}
+                            alt={product.name}
+                            className="w-full h-full object-cover transition-transform duration-700 
+                                     group-hover:scale-110"
+                          />
+
+                          {/* Badges */}
+                          <div className="absolute top-2 sm:top-4 left-2 sm:left-4 flex flex-col gap-1 sm:gap-2">
+                            {product.isNew && (
+                              <span className="px-2 sm:px-3 py-0.5 sm:py-1 bg-[#4ade80] text-white text-xs font-bold rounded-full">
+                                {t('products.new')}
+                              </span>
+                            )}
+                            {product.isSale && (
+                              <span className="px-2 sm:px-3 py-0.5 sm:py-1 bg-[#f87171] text-white text-xs font-bold rounded-full">
+                                {t('products.sale')}
+                              </span>
+                            )}
+                          </div>
+
+                          {/* Add to Cart Button */}
+                          <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-4 
+                                        transform translate-y-full group-hover:translate-y-0 
+                                        transition-transform duration-500">
+                            <button
+                              onClick={(e) => handleAddToCart(product, e)}
+                              className="w-full bg-[#f6b638] hover:bg-[#f58a1f] text-[#211e0f] font-bold 
+                                       py-2 sm:py-3 rounded-xl flex items-center justify-center gap-1 sm:gap-2 
+                                       transition-colors duration-300 text-sm sm:text-base"
+                            >
+                              <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5" />
+                              <span className="hidden sm:inline">{t('products.addToCart')}</span>
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* Product Info */}
+                        <div className="p-3 sm:p-5">
+                          <h3 className="font-bold text-[#211e0f] text-sm sm:text-base group-hover:text-[#f58a1f] 
+                                       transition-colors duration-300 line-clamp-1">
+                            {product.name}
+                          </h3>
+                          <div className="flex items-center justify-between mt-2">
+                            <div className="flex items-center gap-1 sm:gap-2">
+                              <span className="text-base sm:text-xl font-bold text-[#f58a1f]">
+                                {product.price} MAD
+                              </span>
+                              {product.originalPrice && (
+                                <span className="text-xs sm:text-sm text-[#211e0f]/40 line-through">
+                                  {product.originalPrice} MAD
+                                </span>
+                              )}
+                            </div>
+                            {product.rating && (
+                              <div className="flex items-center gap-0.5 sm:gap-1">
+                                <Star className="w-3 h-3 sm:w-4 sm:h-4 text-[#f6b638] fill-[#f6b638]" />
+                                <span className="text-xs sm:text-sm text-[#211e0f]/60">{product.rating}</span>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* List View */}
+                    {viewMode === 'list' && (
+                      <>
+                        <div className="w-32 h-32 flex-shrink-0 overflow-hidden bg-white">
+                          <img
+                            src={product.image || (product.images && product.images[0])}
+                            alt={product.name}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <div className="flex-1 p-4 flex flex-col justify-between">
+                          <div>
+                            <h3 className="font-bold text-[#211e0f] text-lg mb-2">{product.name}</h3>
+                            <p className="text-[#211e0f]/60 text-sm mb-3 line-clamp-2">{product.description}</p>
+                            <div className="flex items-center gap-3">
+                              <span className="text-xl font-bold text-[#f58a1f]">{product.price} MAD</span>
+                              {product.originalPrice && (
+                                <span className="text-sm text-[#211e0f]/40 line-through">{product.originalPrice} MAD</span>
+                              )}
+                            </div>
+                          </div>
+                          <button
+                            onClick={(e) => handleAddToCart(product, e)}
+                            className="mt-4 bg-[#f6b638] hover:bg-[#f58a1f] text-[#211e0f] font-bold 
+                                     py-2 px-4 rounded-xl flex items-center justify-center gap-2 
+                                     transition-colors duration-300 w-full"
+                          >
+                            <ShoppingCart className="w-5 h-5" />
+                            {t('products.addToCart')}
+                          </button>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-20">
+                <p className="text-gray-600 text-lg">No products found</p>
+              </div>
+            )}
+          </>
+        )}
+      </div>
 
       {/* Mobile Filters Sheet */}
       <Sheet open={showMobileFilters} onOpenChange={setShowMobileFilters}>
-        <SheetContent side="left" className="w-[300px] bg-white">
+        <SheetContent side="right" className="w-[300px]">
           <SheetHeader>
             <SheetTitle>{t('products.filter')}</SheetTitle>
           </SheetHeader>
-          <div className="py-6 space-y-6">
-            {/* Category */}
-            <div>
-              <label className="block font-semibold mb-3">{t('products.categories')}</label>
-              <div className="space-y-2">
-                <button
-                  onClick={() => setSelectedCategory('all')}
-                  className={`w-full text-left px-4 py-2 rounded-xl transition-colors ${
-                    selectedCategory === 'all' ? 'bg-[#f6b638]' : 'hover:bg-gray-100'
-                  }`}
-                >
-                  {t('products.categories')}
-                </button>
-                {categories.map((cat) => (
-                  <button
-                    key={cat.id}
-                    onClick={() => setSelectedCategory(cat.id)}
-                    className={`w-full text-left px-4 py-2 rounded-xl transition-colors ${
-                      selectedCategory === cat.id ? 'bg-[#f6b638]' : 'hover:bg-gray-100'
-                    }`}
-                  >
-                    {t(`categories.${cat.id}`)}
-                  </button>
-                ))}
-              </div>
-            </div>
-
+          <div className="space-y-4 mt-6">
             {/* Price Range */}
             <div>
-              <label className="block font-semibold mb-3">{t('products.priceRange')}</label>
-              <input
-                type="range"
-                min="0"
-                max="1000"
-                value={priceRange[1]}
-                onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
-                className="w-full accent-[#f6b638]"
-              />
-              <p className="text-center mt-2">0 - {priceRange[1]} MAD</p>
+              <label className="block text-sm font-semibold text-[#211e0f] mb-3">Price Range</label>
+              <div className="flex gap-2">
+                <input
+                  type="number"
+                  value={priceRange[0]}
+                  onChange={(e) => setPriceRange([Number(e.target.value), priceRange[1]])}
+                  className="w-1/2 px-3 py-2 border border-gray-200 rounded-lg"
+                  placeholder="Min"
+                />
+                <input
+                  type="number"
+                  value={priceRange[1]}
+                  onChange={(e) => setPriceRange([priceRange[0], Number(e.target.value)])}
+                  className="w-1/2 px-3 py-2 border border-gray-200 rounded-lg"
+                  placeholder="Max"
+                />
+              </div>
             </div>
-
-            {/* Sort */}
-            <div>
-              <label className="block font-semibold mb-3">{t('products.sortBy')}</label>
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
-                className="w-full px-4 py-2 border rounded-xl"
-              >
-                <option value="newest">{t('products.newest')}</option>
-                <option value="price-asc">{t('products.priceAsc')}</option>
-                <option value="price-desc">{t('products.priceDesc')}</option>
-                <option value="rating">{t('products.rating')}</option>
-              </select>
-            </div>
-
-            <Button onClick={() => setShowMobileFilters(false)} className="w-full btn-primary">
-              {t('common.apply')}
+            <Button onClick={clearFilters} variant="outline" className="w-full">
+              Clear Filters
             </Button>
           </div>
         </SheetContent>
       </Sheet>
-
-      {/* Products Grid */}
-      <div className="w-full section-padding py-8">
-        {/* Results Count */}
-        <div className="flex items-center justify-between mb-6">
-          <p className="text-gray-600">
-            {t('products.showing')} <span className="font-semibold text-[#211e0f]">{filteredProducts.length}</span> {t('products.of')} {products.length} {t('products.title').toLowerCase()}
-          </p>
-        </div>
-
-        {filteredProducts.length === 0 ? (
-          <div className="text-center py-16">
-            <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Search className="w-10 h-10 text-gray-400" />
-            </div>
-            <h3 className="text-xl font-semibold text-[#211e0f] mb-2">{t('products.noResults')}</h3>
-            <p className="text-gray-500 mb-4">{t('products.clearFilters')}</p>
-            <Button onClick={clearFilters} className="btn-primary">
-              {t('products.clearFilters')}
-            </Button>
-          </div>
-        ) : (
-          <div
-            className={`grid gap-4 sm:gap-6 ${
-              viewMode === 'grid'
-                ? 'grid-cols-2 lg:grid-cols-4'
-                : 'grid-cols-1'
-            }`}
-          >
-            {filteredProducts.map((product) => (
-              <div
-                key={product.id}
-                onClick={() => navigate(`/product/${product.id}`)}
-                className={`group cursor-pointer ${
-                  viewMode === 'list' ? 'flex gap-4 sm:gap-6 bg-white rounded-2xl p-4 shadow-md' : ''
-                }`}
-              >
-                {/* Image */}
-                <div
-                  className={`relative overflow-hidden rounded-2xl bg-white shadow-md ${
-                    viewMode === 'list' ? 'w-32 sm:w-48 h-32 sm:h-48 flex-shrink-0' : 'aspect-square'
-                  }`}
-                >
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                  {/* Badges */}
-                  <div className="absolute top-2 sm:top-3 left-2 sm:left-3 flex flex-col gap-1 sm:gap-2">
-                    {product.isNew && (
-                      <span className="px-2 sm:px-3 py-0.5 sm:py-1 bg-[#4ade80] text-white text-xs font-bold rounded-full">
-                        {t('products.new')}
-                      </span>
-                    )}
-                    {product.isSale && (
-                      <span className="px-2 sm:px-3 py-0.5 sm:py-1 bg-[#f87171] text-white text-xs font-bold rounded-full">
-                        {t('products.sale')}
-                      </span>
-                    )}
-                  </div>
-                  {/* Quick Add */}
-                  <button
-                    onClick={(e) => handleAddToCart(product, e)}
-                    className="absolute bottom-2 sm:bottom-3 right-2 sm:right-3 w-8 h-8 sm:w-10 sm:h-10 bg-[#f6b638] rounded-full 
-                             flex items-center justify-center opacity-0 group-hover:opacity-100 
-                             transform translate-y-2 group-hover:translate-y-0 transition-all duration-300"
-                  >
-                    <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5 text-[#211e0f]" />
-                  </button>
-                </div>
-
-                {/* Info */}
-                <div className={`${viewMode === 'list' ? 'flex-1 py-1 sm:py-2' : 'mt-3 sm:mt-4'}`}>
-                  <p className="text-xs sm:text-sm text-gray-500 capitalize mb-1">{t(`categories.${product.category}`)}</p>
-                  <h3 className="font-semibold text-[#211e0f] group-hover:text-[#f58a1f] transition-colors text-sm sm:text-base line-clamp-1">
-                    {product.name}
-                  </h3>
-                  <div className="flex items-center gap-1 sm:gap-2 mt-1 sm:mt-2">
-                    <div className="flex items-center gap-0.5 sm:gap-1">
-                      {[...Array(5)].map((_, i) => (
-                        <Star
-                          key={i}
-                          className={`w-3 h-3 sm:w-4 sm:h-4 ${
-                            i < (product.rating || 5)
-                              ? 'text-[#f6b638] fill-[#f6b638]'
-                              : 'text-gray-300'
-                          }`}
-                        />
-                      ))}
-                    </div>
-                    <span className="text-xs sm:text-sm text-gray-500">({product.rating || 5})</span>
-                  </div>
-                  <div className="flex items-center gap-2 mt-1 sm:mt-2">
-                    <span className="text-base sm:text-xl font-bold text-[#f58a1f]">{product.price} MAD</span>
-                    {product.originalPrice && (
-                      <span className="text-xs sm:text-sm text-gray-400 line-through">
-                        {product.originalPrice} MAD
-                      </span>
-                    )}
-                  </div>
-                  {viewMode === 'list' && product.description && (
-                    <p className="text-gray-600 mt-2 line-clamp-2 text-sm hidden sm:block">{product.description}</p>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-       </div>
     </div>
     </MainLayout>
   );
 };
+
 export default AllProducts;

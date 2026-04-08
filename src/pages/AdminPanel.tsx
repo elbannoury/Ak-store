@@ -15,7 +15,8 @@ import {
   EyeOff,
   Loader2,
   RefreshCw,
-  CloudUpload
+  CloudUpload,
+  Image as ImageIcon
 } from 'lucide-react';
 import MainLayout from '@/components/MainLayout';
 import { products as initialProducts } from '@/data';
@@ -24,6 +25,7 @@ import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
 import type { Product } from '@/types';
 import { supabase } from '@/lib/supabaseClient';
+import { uploadProductImage } from '@/services/imageUploadService';
 
 const ADMIN_PASSWORD = 'akadmin2024';
 
@@ -41,6 +43,7 @@ const AdminPanel = () => {
   const [activeTab, setActiveTab] = useState<'products' | 'orders'>('products');
   const [isSaving, setIsSaving] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
 
   const loadProducts = async () => {
     setIsLoading(true);
@@ -53,7 +56,6 @@ const AdminPanel = () => {
       if (error) throw error;
 
       if (data && data.length > 0) {
-        // Clean up data if needed (Supabase might return nulls or different types)
         const cleanedData = data.map(p => ({
           ...p,
           price: Number(p.price),
@@ -116,6 +118,22 @@ const AdminPanel = () => {
       toast.error(error.message || 'Failed to delete product');
     } finally {
       setIsSaving(false);
+    }
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !editingProduct) return;
+
+    setIsUploadingImage(true);
+    try {
+      const imageUrl = await uploadProductImage(file, editingProduct.id);
+      setEditingProduct({ ...editingProduct, image: imageUrl });
+      toast.success('Image uploaded successfully!');
+    } catch (error: any) {
+      toast.error(error.message || 'Failed to upload image');
+    } finally {
+      setIsUploadingImage(false);
     }
   };
 
@@ -229,7 +247,7 @@ const AdminPanel = () => {
   return (
     <MainLayout showCartDrawer={false}>
       <div className="min-h-screen bg-[#f5f5f5]">
-        <header className="bg-[#211e0f] text-white sticky top-0 z-50">
+        <header className="bg-[#211e0f] text-white sticky top-20 z-40">
           <div className="w-full px-4 py-4 flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="w-10 h-10 bg-[#f6b638] rounded-full flex items-center justify-center">
@@ -314,18 +332,44 @@ const AdminPanel = () => {
                 <div className="space-y-4">
                   <div><label className="text-sm font-medium">Product Name</label><Input value={editingProduct.name} onChange={(e) => setEditingProduct({ ...editingProduct, name: e.target.value })} /></div>
                   <div><label className="text-sm font-medium">Price (MAD)</label><Input type="number" value={editingProduct.price} onChange={(e) => setEditingProduct({ ...editingProduct, price: Number(e.target.value) })} /></div>
+                  <div><label className="text-sm font-medium">Original Price (MAD)</label><Input type="number" value={editingProduct.originalPrice || ''} onChange={(e) => setEditingProduct({ ...editingProduct, originalPrice: e.target.value ? Number(e.target.value) : undefined })} placeholder="Optional" /></div>
                   <div><label className="text-sm font-medium">Category</label>
                     <select className="w-full p-2 border rounded-xl" value={editingProduct.category} onChange={(e) => setEditingProduct({ ...editingProduct, category: e.target.value as any })}>
-                      <option value="boys">Boys</option><option value="girls">Girls</option><option value="babies">Babies</option><option value="accessories">Accessories</option>
+                      <option value="boys">Boys</option>
+                      <option value="girls">Girls</option>
+                      <option value="baby">Baby</option>
+                      <option value="accessories">Accessories</option>
                     </select>
                   </div>
                 </div>
                 <div className="space-y-4">
-                  <div><label className="text-sm font-medium">Image URL</label><Input value={editingProduct.image} onChange={(e) => setEditingProduct({ ...editingProduct, image: e.target.value })} /></div>
+                  <div>
+                    <label className="text-sm font-medium block mb-2">Product Image</label>
+                    {editingProduct.image && (
+                      <div className="mb-3 relative">
+                        <img src={editingProduct.image} alt="Product" className="w-full h-40 object-cover rounded-xl" />
+                      </div>
+                    )}
+                    <label className="flex items-center justify-center gap-2 px-4 py-3 border-2 border-dashed border-[#f6b638] rounded-xl cursor-pointer hover:bg-[#f6b638]/5 transition-colors">
+                      <ImageIcon className="w-5 h-5 text-[#f6b638]" />
+                      <span className="text-sm font-medium text-[#211e0f]">
+                        {isUploadingImage ? 'Uploading...' : 'Upload Image'}
+                      </span>
+                      <input 
+                        type="file" 
+                        accept="image/*" 
+                        onChange={handleImageUpload}
+                        disabled={isUploadingImage}
+                        className="hidden" 
+                      />
+                    </label>
+                    <p className="text-xs text-gray-500 mt-2">Max 5MB. Supported: JPG, PNG, WebP</p>
+                  </div>
                   <div><label className="text-sm font-medium">Description</label><textarea className="w-full p-2 border rounded-xl h-24" value={editingProduct.description} onChange={(e) => setEditingProduct({ ...editingProduct, description: e.target.value })} /></div>
                   <div className="flex gap-4">
                     <label className="flex items-center gap-2"><input type="checkbox" checked={editingProduct.inStock} onChange={(e) => setEditingProduct({ ...editingProduct, inStock: e.target.checked })} /> In Stock</label>
                     <label className="flex items-center gap-2"><input type="checkbox" checked={editingProduct.isNew} onChange={(e) => setEditingProduct({ ...editingProduct, isNew: e.target.checked })} /> New</label>
+                    <label className="flex items-center gap-2"><input type="checkbox" checked={editingProduct.isSale} onChange={(e) => setEditingProduct({ ...editingProduct, isSale: e.target.checked })} /> Sale</label>
                   </div>
                 </div>
               </div>

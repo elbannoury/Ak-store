@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ArrowLeft, Star, Minus, Plus, ShoppingCart, MessageCircle, Heart, Share2, Truck, Shield, RotateCcw, Copy, Check } from 'lucide-react';
@@ -7,36 +7,18 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { toast } from 'sonner';
-import { products as initialProducts } from '@/data';
 import { useCartStore } from '@/store/cartStore';
-
-// نوع بيانات المنتج
-interface Product {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  originalPrice?: number;
-  image?: string;
-  images: string[];
-  category: string;
-  sku?: string;
-  rating?: number;
-  isSale?: boolean;
-  isNew?: boolean;
-  colors?: string[];
-  sizes?: string[];
-  stock?: number;
-}
+import { useProducts } from '@/hooks/useProducts';
+import type { Product } from '@/types';
 
 export default function ProductDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { addItem } = useCartStore();
+  const { products, isLoading } = useProducts();
   
   const [product, setProduct] = useState<Product | null>(null);
-  const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState(0);
   const [selectedColor, setSelectedColor] = useState('');
   const [selectedSize, setSelectedSize] = useState('');
@@ -46,41 +28,24 @@ export default function ProductDetail() {
 
   // جلب بيانات المنتج
   useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        setLoading(true);
-        
-        // جلب البيانات من localStorage أو البيانات الأولية
-        const savedProducts = localStorage.getItem('ak-products');
-        const allProducts = savedProducts ? JSON.parse(savedProducts) : initialProducts;
-        
-        const foundProduct = allProducts.find((p: Product) => p.id === id);
-        
-        if (foundProduct) {
-          // تأكد من وجود images حتى لو كانت صورة واحدة
-          if (!foundProduct.images || foundProduct.images.length === 0) {
-            foundProduct.images = [foundProduct.image || ''];
-          }
-          setProduct(foundProduct);
-          if (foundProduct.colors?.length) {
-            setSelectedColor(foundProduct.colors[0]);
-          }
-          if (foundProduct.sizes?.length) {
-            setSelectedSize(foundProduct.sizes[0]);
-          }
+    if (!isLoading && id) {
+      const foundProduct = products.find((p: Product) => p.id === id);
+      
+      if (foundProduct) {
+        // تأكد من وجود images حتى لو كانت صورة واحدة
+        if (!foundProduct.images || foundProduct.images.length === 0) {
+          foundProduct.images = [foundProduct.image || ''];
         }
-      } catch (error) {
-        toast.error('Error loading product');
-        console.error('Error fetching product:', error);
-      } finally {
-        setLoading(false);
+        setProduct(foundProduct);
+        if (foundProduct.colors?.length) {
+          setSelectedColor(foundProduct.colors[0]);
+        }
+        if (foundProduct.sizes?.length) {
+          setSelectedSize(foundProduct.sizes[0]);
+        }
       }
-    };
-
-    if (id) {
-      fetchProduct();
     }
-  }, [id]);
+  }, [id, products, isLoading]);
 
   // إضافة إلى السلة
   const handleAddToCart = () => {
@@ -98,353 +63,267 @@ export default function ProductDetail() {
   };
 
   // نسخ رابط المنتج
-  const handleCopyUrl = () => {
-    const productUrl = `${window.location.origin}/product/${id}`;
-    navigator.clipboard.writeText(productUrl).then(() => {
-      setCopied(true);
-      toast.success('Product link copied to clipboard!');
-      setTimeout(() => setCopied(false), 2000);
-    }).catch(() => {
-      toast.error('Failed to copy link');
-    });
+  const handleShareLink = () => {
+    const url = window.location.href;
+    navigator.clipboard.writeText(url);
+    setCopied(true);
+    toast.success('Link copied to clipboard!');
+    setTimeout(() => setCopied(false), 2000);
   };
 
-  // الطلب عبر واتساب
+  // إرسال عبر WhatsApp
   const handleWhatsAppOrder = () => {
     if (!product) return;
-    
-    const cartItem = {
-      id: product.id,
-      name: `${product.name}${selectedSize ? ` (${selectedSize})` : ''}${selectedColor ? ` - ${selectedColor}` : ''}`,
-      price: product.price,
-      image: product.images[0] || '',
-      category: product.category,
-      quantity: quantity,
-      size: selectedSize,
-    };
-    
-    // استخدام خدمة واتساب الموجودة في المشروع
-    import('@/services/whatsappService').then(({ whatsappService }) => {
-      whatsappService.quickOrder([cartItem], product.price * quantity);
-      toast.success('Opening WhatsApp to complete your order!');
-    });
+    const message = `Hi, I'm interested in ${product.name} (${product.price} MAD)`;
+    const whatsappUrl = `https://wa.me/212XXXXXXXXX?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
   };
 
-  if (loading) {
+  if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#fff9ed]">
-        <div className="animate-spin rounded-full h-16 w-16 border-4 border-[#f6b638] border-t-[#f58a1f]"></div>
-      </div>
+      <MainLayout>
+        <div className="flex justify-center items-center py-20">
+          <div className="w-12 h-12 border-4 border-[#f6b638] border-t-transparent rounded-full animate-spin"></div>
+        </div>
+      </MainLayout>
     );
   }
 
   if (!product) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center gap-4 bg-[#fff9ed]">
-        <h2 className="text-2xl font-bold text-[#211e0f]">{t('productDetail.notFound')}</h2>
-        <Button onClick={() => navigate('/')} className="btn-primary">
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          {t('common.backToHome')}
-        </Button>
-      </div>
+      <MainLayout>
+        <div className="min-h-screen flex flex-col items-center justify-center">
+          <h1 className="text-3xl font-bold text-[#211e0f] mb-4">Product Not Found</h1>
+          <Button onClick={() => navigate('/products')} className="btn-primary">
+            <ArrowLeft className="w-5 h-5 mr-2" />
+            Back to Products
+          </Button>
+        </div>
+      </MainLayout>
     );
   }
 
-  const discountPercentage = product.originalPrice 
-    ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
-    : 0;
-
   return (
-    <MainLayout showCartDrawer={false}>
-    <div className="min-h-screen bg-[#fff9ed]">
-      <div className="container-custom px-4 sm:px-6 lg:px-8 py-6 md:py-12">
-        {/* زر الرجوع */}
-        <button 
-          onClick={() => navigate(-1)} 
-          className="inline-flex items-center gap-2 text-[#211e0f] hover:text-[#f58a1f] transition-colors mb-8 group"
-        >
-          <ArrowLeft className="h-5 w-5 group-hover:-translate-x-1 transition-transform" />
-          <span className="font-semibold">{t('common.back')}</span>
-        </button>
+    <MainLayout>
+      <div className="min-h-screen bg-white">
+        {/* Breadcrumb */}
+        <div className="section-padding py-6 border-b">
+          <button
+            onClick={() => navigate(-1)}
+            className="flex items-center gap-2 text-[#f58a1f] hover:text-[#f6b638] transition-colors"
+          >
+            <ArrowLeft className="w-5 h-5" />
+            Back
+          </button>
+        </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16">
-          {/* قسم الصور */}
-          <div className="space-y-4">
-            {/* الصورة الرئيسية */}
-            <div className="relative aspect-square bg-white rounded-3xl overflow-hidden shadow-2xl hover:shadow-3xl transition-all duration-500 group">
-              <img
-                src={product.images[selectedImage]}
-                alt={product.name}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-              />
-              
-              {/* الشارات */}
-              <div className="absolute top-6 left-6 flex flex-col gap-3">
-                {product.isSale && (
-                  <div className="bg-red-500 text-white px-4 py-2 rounded-full font-bold shadow-lg animate-pulse">
-                    -{discountPercentage}%
-                  </div>
-                )}
-                {product.isNew && (
-                  <Badge className="bg-green-500 text-white font-bold text-sm px-4 py-2 rounded-full shadow-lg">
-                    {t('products.new')}
-                  </Badge>
-                )}
+        <div className="section-padding py-12">
+          <div className="grid md:grid-cols-2 gap-12">
+            {/* Image Gallery */}
+            <div>
+              <div className="bg-[#fff9ed] rounded-2xl overflow-hidden mb-4 aspect-square flex items-center justify-center">
+                <img
+                  src={product.images[selectedImage] || product.image}
+                  alt={product.name}
+                  className="w-full h-full object-cover"
+                />
               </div>
-
-              {/* أزرار الإجراء السريعة */}
-              <div className="absolute top-6 right-6 flex flex-col gap-3">
-                <button
-                  onClick={() => setIsFavorite(!isFavorite)}
-                  className={`w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-110 ${
-                    isFavorite 
-                      ? 'bg-red-500 text-white' 
-                      : 'bg-white text-[#211e0f] hover:bg-red-500 hover:text-white'
-                  }`}
-                >
-                  <Heart className={`h-6 w-6 ${isFavorite ? 'fill-current' : ''}`} />
-                </button>
-                <button
-                  onClick={handleCopyUrl}
-                  className={`w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-110 ${
-                    copied
-                      ? 'bg-green-500 text-white'
-                      : 'bg-white text-[#211e0f] hover:bg-[#f6b638] hover:text-white'
-                  }`}
-                >
-                  {copied ? <Check className="h-6 w-6" /> : <Copy className="h-6 w-6" />}
-                </button>
-              </div>
-            </div>
-
-            {/* معرض الصور المصغرة */}
-            {product.images.length > 1 && (
-              <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
-                {product.images.map((image, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setSelectedImage(index)}
-                    className={`flex-shrink-0 w-20 h-20 rounded-2xl overflow-hidden border-3 transition-all duration-300 hover:scale-110 ${
-                      selectedImage === index 
-                        ? 'border-[#f6b638] shadow-lg ring-2 ring-[#f6b638]/50' 
-                        : 'border-gray-200 hover:border-[#f6b638]'
-                    }`}
-                  >
-                    <img src={image} alt="" className="w-full h-full object-cover" />
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* قسم التفاصيل */}
-          <div className="space-y-6">
-            {/* العنوان والتصنيف */}
-            <div className="space-y-3">
-              <div className="flex items-center gap-3">
-                <Badge className="bg-[#f6b638]/20 text-[#f58a1f] font-semibold px-4 py-1.5 rounded-full">
-                  {t(`categories.${product.category}`)}
-                </Badge>
-                {product.sku && (
-                  <span className="text-sm text-[#211e0f]/60">SKU: {product.sku}</span>
-                )}
-              </div>
-              
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#211e0f] leading-tight">
-                {product.name}
-              </h1>
-              
-              {/* التقييم */}
-              <div className="flex items-center gap-3">
-                <div className="flex gap-1">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className={`h-5 w-5 ${
-                        i < (product.rating || 5)
-                          ? 'fill-yellow-400 text-yellow-400'
-                          : 'text-gray-300'
+              {product.images && product.images.length > 1 && (
+                <div className="grid grid-cols-4 gap-2">
+                  {product.images.map((img, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setSelectedImage(idx)}
+                      className={`aspect-square rounded-lg overflow-hidden border-2 transition-colors ${
+                        selectedImage === idx ? 'border-[#f6b638]' : 'border-gray-200'
                       }`}
-                    />
+                    >
+                      <img src={img} alt={`${product.name} ${idx + 1}`} className="w-full h-full object-cover" />
+                    </button>
                   ))}
                 </div>
-                <span className="text-lg font-semibold text-[#211e0f]">
-                  {product.rating || 5}.0
-                </span>
-                <span className="text-sm text-[#211e0f]/60">(124 reviews)</span>
-              </div>
-            </div>
-
-            <Separator className="bg-[#f6b638]/20" />
-
-            {/* السعر */}
-            <div className="space-y-2">
-              <div className="flex items-baseline gap-4">
-                <span className="text-4xl sm:text-5xl font-bold text-[#f58a1f]">
-                  {product.price} MAD
-                </span>
-                {product.originalPrice && (
-                  <span className="text-2xl text-[#211e0f]/40 line-through font-semibold">
-                    {product.originalPrice} MAD
-                  </span>
-                )}
-              </div>
-              {product.originalPrice && (
-                <p className="text-sm text-green-600 font-semibold">
-                  Save {product.originalPrice - product.price} MAD ({discountPercentage}% off)
-                </p>
               )}
             </div>
 
-            {/* الوصف */}
-            <div className="bg-white rounded-2xl p-6 border border-[#f6b638]/10">
-              <h3 className="font-bold text-lg text-[#211e0f] mb-3">{t('productDetail.description')}</h3>
-              <p className="text-[#211e0f]/70 leading-relaxed">
-                {product.description}
-              </p>
-            </div>
+            {/* Product Info */}
+            <div>
+              <div className="mb-4 flex items-center gap-2">
+                {product.isNew && <Badge className="bg-[#4ade80] text-white">New</Badge>}
+                {product.isSale && <Badge className="bg-[#f87171] text-white">Sale</Badge>}
+              </div>
 
-            {/* اختيار اللون */}
-            {product.colors && product.colors.length > 0 && (
-              <div className="space-y-3">
-                <h3 className="font-bold text-lg text-[#211e0f]">
-                  {t('productDetail.color')}: <span className="text-[#f58a1f]">{selectedColor}</span>
-                </h3>
-                <div className="flex gap-3 flex-wrap">
-                  {product.colors.map((color) => (
-                    <button
-                      key={color}
-                      onClick={() => setSelectedColor(color)}
-                      className={`px-5 py-3 rounded-xl font-semibold border-2 transition-all duration-300 hover:scale-105 ${
-                        selectedColor === color
-                          ? 'border-[#f6b638] bg-[#f6b638]/10 text-[#211e0f] shadow-lg'
-                          : 'border-gray-300 bg-white text-[#211e0f] hover:border-[#f6b638]'
-                      }`}
-                    >
-                      {color}
-                    </button>
-                  ))}
+              <h1 className="text-4xl font-bold text-[#211e0f] mb-2" style={{ fontFamily: 'Rowdies, cursive' }}>
+                {product.name}
+              </h1>
+
+              {product.rating && (
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="flex items-center gap-1">
+                    {[...Array(5)].map((_, i) => (
+                      <Star
+                        key={i}
+                        className={`w-5 h-5 ${
+                          i < Math.floor(product.rating || 0)
+                            ? 'fill-[#f6b638] text-[#f6b638]'
+                            : 'text-gray-300'
+                        }`}
+                      />
+                    ))}
+                  </div>
+                  <span className="text-gray-600">({product.rating} stars)</span>
+                </div>
+              )}
+
+              <Separator className="my-4" />
+
+              {/* Price */}
+              <div className="mb-6">
+                <div className="flex items-baseline gap-3">
+                  <span className="text-4xl font-bold text-[#f58a1f]">{product.price} MAD</span>
+                  {product.originalPrice && (
+                    <span className="text-xl text-gray-400 line-through">{product.originalPrice} MAD</span>
+                  )}
                 </div>
               </div>
-            )}
 
-            {/* اختيار المقاس */}
-            {product.sizes && product.sizes.length > 0 && (
-              <div className="space-y-3">
-                <h3 className="font-bold text-lg text-[#211e0f]">
-                  {t('productDetail.size')}: <span className="text-[#f58a1f]">{selectedSize}</span>
-                </h3>
-                <div className="flex gap-3 flex-wrap">
-                  {product.sizes.map((size) => (
-                    <button
-                      key={size}
-                      onClick={() => setSelectedSize(size)}
-                      className={`w-14 h-14 rounded-xl font-bold border-2 transition-all duration-300 hover:scale-105 flex items-center justify-center ${
-                        selectedSize === size
-                          ? 'border-[#f6b638] bg-[#f6b638]/10 text-[#211e0f] shadow-lg'
-                          : 'border-gray-300 bg-white text-[#211e0f] hover:border-[#f6b638]'
-                      }`}
-                    >
-                      {size}
-                    </button>
-                  ))}
+              {/* Description */}
+              {product.description && (
+                <p className="text-gray-600 mb-6 leading-relaxed">{product.description}</p>
+              )}
+
+              {/* Colors */}
+              {product.colors && product.colors.length > 0 && (
+                <div className="mb-6">
+                  <label className="block text-sm font-semibold text-[#211e0f] mb-3">Color</label>
+                  <div className="flex gap-3">
+                    {product.colors.map((color) => (
+                      <button
+                        key={color}
+                        onClick={() => setSelectedColor(color)}
+                        className={`px-4 py-2 rounded-lg border-2 transition-colors ${
+                          selectedColor === color
+                            ? 'border-[#f6b638] bg-[#f6b638]/10'
+                            : 'border-gray-200 hover:border-[#f6b638]'
+                        }`}
+                      >
+                        {color}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Sizes */}
+              {product.sizes && product.sizes.length > 0 && (
+                <div className="mb-6">
+                  <label className="block text-sm font-semibold text-[#211e0f] mb-3">Size</label>
+                  <div className="flex gap-3">
+                    {product.sizes.map((size) => (
+                      <button
+                        key={size}
+                        onClick={() => setSelectedSize(size)}
+                        className={`px-4 py-2 rounded-lg border-2 transition-colors ${
+                          selectedSize === size
+                            ? 'border-[#f6b638] bg-[#f6b638]/10'
+                            : 'border-gray-200 hover:border-[#f6b638]'
+                        }`}
+                      >
+                        {size}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Quantity */}
+              <div className="mb-6">
+                <label className="block text-sm font-semibold text-[#211e0f] mb-3">Quantity</label>
+                <div className="flex items-center gap-4">
+                  <button
+                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                    className="p-2 border border-gray-200 rounded-lg hover:bg-gray-100"
+                  >
+                    <Minus className="w-5 h-5" />
+                  </button>
+                  <span className="text-xl font-semibold w-8 text-center">{quantity}</span>
+                  <button
+                    onClick={() => setQuantity(quantity + 1)}
+                    className="p-2 border border-gray-200 rounded-lg hover:bg-gray-100"
+                  >
+                    <Plus className="w-5 h-5" />
+                  </button>
                 </div>
               </div>
-            )}
 
-            {/* الكمية */}
-            <div className="space-y-3">
-              <h3 className="font-bold text-lg text-[#211e0f]">{t('productDetail.quantity')}</h3>
-              <div className="flex items-center gap-4 bg-white rounded-2xl p-4 w-fit border border-[#f6b638]/10">
-                <button
-                  onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  disabled={quantity <= 1}
-                  className="w-10 h-10 rounded-lg bg-[#f6b638]/10 text-[#f58a1f] hover:bg-[#f6b638] hover:text-white disabled:opacity-50 transition-all flex items-center justify-center font-bold"
+              {/* Action Buttons */}
+              <div className="space-y-3 mb-8">
+                <Button
+                  onClick={handleAddToCart}
+                  className="w-full btn-primary py-4 text-lg"
                 >
-                  <Minus className="h-5 w-5" />
-                </button>
-                <span className="text-2xl font-bold text-[#211e0f] w-12 text-center">{quantity}</span>
-                <button
-                  onClick={() => setQuantity(quantity + 1)}
-                  className="w-10 h-10 rounded-lg bg-[#f6b638]/10 text-[#f58a1f] hover:bg-[#f6b638] hover:text-white transition-all flex items-center justify-center font-bold"
+                  <ShoppingCart className="w-5 h-5 mr-2" />
+                  Add to Cart
+                </Button>
+                <Button
+                  onClick={handleWhatsAppOrder}
+                  variant="outline"
+                  className="w-full py-4 text-lg border-[#f6b638] text-[#f6b638] hover:bg-[#f6b638]/10"
                 >
-                  <Plus className="h-5 w-5" />
+                  <MessageCircle className="w-5 h-5 mr-2" />
+                  Order via WhatsApp
+                </Button>
+              </div>
+
+              {/* Features */}
+              <div className="space-y-3 pt-6 border-t">
+                <div className="flex items-center gap-3">
+                  <Truck className="w-5 h-5 text-[#f6b638]" />
+                  <span className="text-gray-600">Free shipping on orders over 500 MAD</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Shield className="w-5 h-5 text-[#f6b638]" />
+                  <span className="text-gray-600">Secure checkout with SSL encryption</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <RotateCcw className="w-5 h-5 text-[#f6b638]" />
+                  <span className="text-gray-600">30-day money-back guarantee</span>
+                </div>
+              </div>
+
+              {/* Share Buttons */}
+              <div className="mt-8 pt-6 border-t flex gap-3">
+                <button
+                  onClick={() => setIsFavorite(!isFavorite)}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-colors ${
+                    isFavorite
+                      ? 'bg-red-50 border-red-200 text-red-600'
+                      : 'border-gray-200 text-gray-600 hover:border-red-200'
+                  }`}
+                >
+                  <Heart className={`w-5 h-5 ${isFavorite ? 'fill-current' : ''}`} />
+                  Favorite
                 </button>
-              </div>
-            </div>
-
-            {/* أزرار الإجراء */}
-            <div className="space-y-3 pt-6">
-              <button
-                onClick={handleAddToCart}
-                className="w-full bg-[#f6b638] hover:bg-[#f58a1f] text-[#211e0f] font-bold py-4 px-6 rounded-2xl flex items-center justify-center gap-3 transition-all duration-300 hover:shadow-xl hover:scale-105 text-lg"
-              >
-                <ShoppingCart className="h-6 w-6" />
-                {t('productDetail.addToCart')}
-              </button>
-              
-              <button
-                onClick={handleWhatsAppOrder}
-                className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-6 rounded-2xl flex items-center justify-center gap-3 transition-all duration-300 hover:shadow-xl hover:scale-105 text-lg"
-              >
-                <MessageCircle className="h-6 w-6" />
-                WhatsApp
-              </button>
-            </div>
-
-            {/* قسم الحوافز والمميزات */}
-            <div className="bg-gradient-to-r from-[#f6b638]/10 to-[#f58a1f]/10 rounded-2xl p-6 border border-[#f6b638]/20">
-              <h3 className="font-bold text-lg text-[#211e0f] mb-4">Why Choose AKRENACE?</h3>
-              <div className="space-y-4">
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 bg-green-500/20 rounded-full flex items-center justify-center flex-shrink-0">
-                    <Check className="h-5 w-5 text-green-600" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-[#211e0f] mb-1">Free Shipping</h4>
-                    <p className="text-sm text-[#211e0f]/70">On all orders over 200 MAD</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 bg-blue-500/20 rounded-full flex items-center justify-center flex-shrink-0">
-                    <Shield className="h-5 w-5 text-blue-600" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-[#211e0f] mb-1">30-Day Money Back Guarantee</h4>
-                    <p className="text-sm text-[#211e0f]/70">Not satisfied? Full refund, no questions asked</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 bg-purple-500/20 rounded-full flex items-center justify-center flex-shrink-0">
-                    <RotateCcw className="h-5 w-5 text-purple-600" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-[#211e0f] mb-1">Easy Returns</h4>
-                    <p className="text-sm text-[#211e0f]/70">Hassle-free returns within 30 days</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* المميزات */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-6">
-              <div className="bg-white rounded-2xl p-4 text-center border border-[#f6b638]/10 hover:shadow-lg transition-all">
-                <Truck className="h-8 w-8 text-[#f6b638] mx-auto mb-2" />
-                <p className="font-semibold text-[#211e0f] text-sm">{t('productDetail.freeDelivery')}</p>
-              </div>
-              <div className="bg-white rounded-2xl p-4 text-center border border-[#f6b638]/10 hover:shadow-lg transition-all">
-                <Shield className="h-8 w-8 text-[#f6b638] mx-auto mb-2" />
-                <p className="font-semibold text-[#211e0f] text-sm">{t('productDetail.securePayment')}</p>
-              </div>
-              <div className="bg-white rounded-2xl p-4 text-center border border-[#f6b638]/10 hover:shadow-lg transition-all">
-                <RotateCcw className="h-8 w-8 text-[#f6b638] mx-auto mb-2" />
-                <p className="font-semibold text-[#211e0f] text-sm">{t('productDetail.easyReturns')}</p>
+                <button
+                  onClick={handleShareLink}
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg border border-gray-200 text-gray-600 hover:border-[#f6b638]"
+                >
+                  {copied ? (
+                    <>
+                      <Check className="w-5 h-5 text-green-600" />
+                      Copied
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-5 h-5" />
+                      Share
+                    </>
+                  )}
+                </button>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
     </MainLayout>
   );
 }
