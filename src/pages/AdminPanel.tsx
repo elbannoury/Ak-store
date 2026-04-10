@@ -8,8 +8,6 @@ import {
   Save, 
   X, 
   LogOut,
-  Package,
-  ShoppingBag,
   Search,
   Eye,
   EyeOff,
