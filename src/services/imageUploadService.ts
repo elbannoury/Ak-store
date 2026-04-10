@@ -27,7 +27,7 @@ export const uploadProductImage = async (file: File, productId?: string): Promis
     const fileName = `${productId || 'product'}-${timestamp}-${randomString}.${fileExtension}`;
 
     // رفع الملف إلى Supabase Storage
-    const { data, error } = await supabase.storage
+    const { error } = await supabase.storage
       .from(BUCKET_NAME)
       .upload(`products/${fileName}`, file, {
         cacheControl: '3600',
