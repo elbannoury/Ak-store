@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ArrowLeft, Star, Minus, Plus, ShoppingCart, MessageCircle, Heart, Share2, Truck, Shield, RotateCcw, Copy, Check } from 'lucide-react';
+import { ArrowLeft, Star, Minus, Plus, ShoppingCart, MessageCircle, Heart, Truck, Shield, RotateCcw, Copy, Check } from 'lucide-react';
 import MainLayout from '@/components/MainLayout';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -55,7 +55,7 @@ export default function ProductDetail() {
       id: product.id,
       name: `${product.name}${selectedSize ? ` (${selectedSize})` : ''}${selectedColor ? ` - ${selectedColor}` : ''}`,
       price: product.price,
-      image: product.images[0] || '',
+      image: (product.images && product.images[0]) || product.image || '',
       category: product.category,
       size: selectedSize,
     });
@@ -123,7 +123,7 @@ export default function ProductDetail() {
             <div>
               <div className="bg-[#fff9ed] rounded-2xl overflow-hidden mb-4 aspect-square flex items-center justify-center">
                 <img
-                  src={product.images[selectedImage] || product.image}
+                  src={(product.images && product.images[selectedImage]) || product.image}
                   alt={product.name}
                   className="w-full h-full object-cover"
                 />
