@@ -5,7 +5,6 @@ import {
   Search, 
   Filter, 
   ShoppingCart, 
-  Star, 
   Grid3X3, 
   List,
   ChevronDown,
@@ -276,125 +275,76 @@ const AllProducts = () => {
 
             {/* Products Grid/List */}
             {filteredProducts.length > 0 ? (
-              <div className={viewMode === 'grid' ? 'grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6' : 'space-y-4'}>
+              <div className={viewMode === 'grid' 
+                ? "grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6" 
+                : "flex flex-col gap-4"
+              }>
                 {filteredProducts.map((product) => (
                   <div
                     key={product.id}
-                    className={viewMode === 'grid' ? 'product-card group' : 'flex gap-4 bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow'}
                     onClick={() => navigate(`/product/${product.id}`)}
+                    className={`bg-white rounded-2xl sm:rounded-3xl overflow-hidden shadow-md 
+                               hover:shadow-xl transition-all duration-300 cursor-pointer group ${
+                                 viewMode === 'list' ? 'flex flex-row h-40 sm:h-48' : ''
+                               }`}
                   >
-                    {/* Grid View */}
-                    {viewMode === 'grid' && (
-                      <div 
-                        className="relative bg-[#fff9ed] rounded-2xl sm:rounded-3xl overflow-hidden shadow-lg 
-                                  hover:shadow-2xl transition-all duration-500 cursor-pointer"
-                      >
-                        {/* Image Container */}
-                        <div className="relative h-48 sm:h-64 overflow-hidden bg-white">
-                          <img
-                            src={product.image || (product.images && product.images[0])}
-                            alt={product.name}
-                            className="w-full h-full object-cover transition-transform duration-700 
-                                     group-hover:scale-110"
-                          />
+                    {/* Image */}
+                    <div className={`relative overflow-hidden bg-white ${
+                      viewMode === 'list' ? 'w-40 sm:w-48 h-full' : 'h-48 sm:h-64'
+                    }`}>
+                      <img
+                        src={product.image || (product.images && product.images[0])}
+                        alt={product.name}
+                        className="w-full h-full object-cover transition-transform duration-700 
+                                 group-hover:scale-110"
+                      />
+                      {product.isNew && (
+                        <span className="absolute top-2 left-2 px-2 py-0.5 bg-[#4ade80] text-white text-[10px] sm:text-xs font-bold rounded-full">
+                          NEW
+                        </span>
+                      )}
+                    </div>
 
-                          {/* Badges */}
-                          <div className="absolute top-2 sm:top-4 left-2 sm:left-4 flex flex-col gap-1 sm:gap-2">
-                            {product.isNew && (
-                              <span className="px-2 sm:px-3 py-0.5 sm:py-1 bg-[#4ade80] text-white text-xs font-bold rounded-full">
-                                {t('products.new')}
-                              </span>
-                            )}
-                            {product.isSale && (
-                              <span className="px-2 sm:px-3 py-0.5 sm:py-1 bg-[#f87171] text-white text-xs font-bold rounded-full">
-                                {t('products.sale')}
-                              </span>
-                            )}
-                          </div>
-
-                          {/* Add to Cart Button */}
-                          <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-4 
-                                        transform translate-y-full group-hover:translate-y-0 
-                                        transition-transform duration-500">
-                            <button
-                              onClick={(e) => handleAddToCart(product, e)}
-                              className="w-full bg-[#f6b638] hover:bg-[#f58a1f] text-[#211e0f] font-bold 
-                                       py-2 sm:py-3 rounded-xl flex items-center justify-center gap-1 sm:gap-2 
-                                       transition-colors duration-300 text-sm sm:text-base"
-                            >
-                              <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5" />
-                              <span className="hidden sm:inline">{t('products.addToCart')}</span>
-                            </button>
-                          </div>
-                        </div>
-
-                        {/* Product Info */}
-                        <div className="p-3 sm:p-5">
-                          <h3 className="font-bold text-[#211e0f] text-sm sm:text-base group-hover:text-[#f58a1f] 
-                                       transition-colors duration-300 line-clamp-1">
+                    {/* Info */}
+                    <div className={`p-3 sm:p-5 flex flex-col justify-between flex-1`}>
+                      <div>
+                        <div className="flex justify-between items-start mb-1 sm:mb-2">
+                          <h3 className="font-bold text-[#211e0f] text-sm sm:text-lg group-hover:text-[#f58a1f] transition-colors line-clamp-1">
                             {product.name}
                           </h3>
-                          <div className="flex items-center justify-between mt-2">
-                            <div className="flex items-center gap-1 sm:gap-2">
-                              <span className="text-base sm:text-xl font-bold text-[#f58a1f]">
-                                {product.price} MAD
-                              </span>
-                              {product.originalPrice && (
-                                <span className="text-xs sm:text-sm text-[#211e0f]/40 line-through">
-                                  {product.originalPrice} MAD
-                                </span>
-                              )}
-                            </div>
-                            {product.rating && (
-                              <div className="flex items-center gap-0.5 sm:gap-1">
-                                <Star className="w-3 h-3 sm:w-4 sm:h-4 text-[#f6b638] fill-[#f6b638]" />
-                                <span className="text-xs sm:text-sm text-[#211e0f]/60">{product.rating}</span>
-                              </div>
-                            )}
-                          </div>
                         </div>
+                        <p className="text-gray-500 text-xs sm:text-sm line-clamp-2 mb-2">
+                          {product.description}
+                        </p>
                       </div>
-                    )}
 
-                    {/* List View */}
-                    {viewMode === 'list' && (
-                      <>
-                        <div className="w-32 h-32 flex-shrink-0 overflow-hidden bg-white">
-                          <img
-                            src={product.image || (product.images && product.images[0])}
-                            alt={product.name}
-                            className="w-full h-full object-cover"
-                          />
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-1 sm:gap-2">
+                          <span className="text-sm sm:text-xl font-bold text-[#f58a1f]">
+                            {product.price} MAD
+                          </span>
                         </div>
-                        <div className="flex-1 p-4 flex flex-col justify-between">
-                          <div>
-                            <h3 className="font-bold text-[#211e0f] text-lg mb-2">{product.name}</h3>
-                            <p className="text-[#211e0f]/60 text-sm mb-3 line-clamp-2">{product.description}</p>
-                            <div className="flex items-center gap-3">
-                              <span className="text-xl font-bold text-[#f58a1f]">{product.price} MAD</span>
-                              {product.originalPrice && (
-                                <span className="text-sm text-[#211e0f]/40 line-through">{product.originalPrice} MAD</span>
-                              )}
-                            </div>
-                          </div>
-                          <button
-                            onClick={(e) => handleAddToCart(product, e)}
-                            className="mt-4 bg-[#f6b638] hover:bg-[#f58a1f] text-[#211e0f] font-bold 
-                                     py-2 px-4 rounded-xl flex items-center justify-center gap-2 
-                                     transition-colors duration-300 w-full"
-                          >
-                            <ShoppingCart className="w-5 h-5" />
-                            {t('products.addToCart')}
-                          </button>
-                        </div>
-                      </>
-                    )}
+                        <button
+                          onClick={(e) => handleAddToCart(product, e)}
+                          className="p-2 sm:p-3 bg-[#f6b638] rounded-xl hover:bg-[#f58a1f] transition-colors"
+                        >
+                          <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5 text-[#211e0f]" />
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>
             ) : (
               <div className="text-center py-20">
-                <p className="text-gray-600 text-lg">No products found</p>
+                <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Search className="w-10 h-10 text-gray-300" />
+                </div>
+                <h3 className="text-xl font-bold text-[#211e0f] mb-2">No products found</h3>
+                <p className="text-gray-500 mb-6">Try adjusting your filters or search query</p>
+                <Button onClick={clearFilters} variant="outline" className="border-[#f6b638] text-[#211e0f]">
+                  Clear all filters
+                </Button>
               </div>
             )}
           </>
@@ -403,34 +353,70 @@ const AllProducts = () => {
 
       {/* Mobile Filters Sheet */}
       <Sheet open={showMobileFilters} onOpenChange={setShowMobileFilters}>
-        <SheetContent side="right" className="w-[300px]">
+        <SheetContent side="left" className="w-full max-w-xs bg-[#fff9ed]">
           <SheetHeader>
-            <SheetTitle>{t('products.filter')}</SheetTitle>
+            <SheetTitle style={{ fontFamily: 'Rowdies, cursive' }}>Filters</SheetTitle>
           </SheetHeader>
-          <div className="space-y-4 mt-6">
-            {/* Price Range */}
+          <div className="py-6 space-y-8">
+            {/* Category */}
             <div>
-              <label className="block text-sm font-semibold text-[#211e0f] mb-3">Price Range</label>
-              <div className="flex gap-2">
-                <input
-                  type="number"
-                  value={priceRange[0]}
-                  onChange={(e) => setPriceRange([Number(e.target.value), priceRange[1]])}
-                  className="w-1/2 px-3 py-2 border border-gray-200 rounded-lg"
-                  placeholder="Min"
-                />
-                <input
-                  type="number"
-                  value={priceRange[1]}
-                  onChange={(e) => setPriceRange([priceRange[0], Number(e.target.value)])}
-                  className="w-1/2 px-3 py-2 border border-gray-200 rounded-lg"
-                  placeholder="Max"
-                />
+              <h4 className="font-bold text-[#211e0f] mb-4">Category</h4>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  onClick={() => setSelectedCategory('all')}
+                  className={`px-4 py-2 rounded-full text-sm font-medium border transition-colors ${
+                    selectedCategory === 'all'
+                      ? 'bg-[#f6b638] border-[#f6b638] text-[#211e0f]'
+                      : 'bg-white border-gray-200 text-gray-600'
+                  }`}
+                >
+                  All
+                </button>
+                {categories.map((cat) => (
+                  <button
+                    key={cat.id}
+                    onClick={() => setSelectedCategory(cat.id)}
+                    className={`px-4 py-2 rounded-full text-sm font-medium border transition-colors ${
+                      selectedCategory === cat.id
+                        ? 'bg-[#f6b638] border-[#f6b638] text-[#211e0f]'
+                        : 'bg-white border-gray-200 text-gray-600'
+                    }`}
+                  >
+                    {t(`categories.${cat.id}`)}
+                  </button>
+                ))}
               </div>
             </div>
-            <Button onClick={clearFilters} variant="outline" className="w-full">
-              Clear Filters
-            </Button>
+
+            {/* Price */}
+            <div>
+              <h4 className="font-bold text-[#211e0f] mb-4">Price Range</h4>
+              <div className="space-y-4">
+                <input
+                  type="range"
+                  min="0"
+                  max="1000"
+                  step="50"
+                  value={priceRange[1]}
+                  onChange={(e) => setPriceRange([0, parseInt(e.target.value)])}
+                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#f6b638]"
+                />
+                <div className="flex justify-between text-sm text-gray-600">
+                  <span>0 MAD</span>
+                  <span>Up to {priceRange[1]} MAD</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div className="pt-6 space-y-3">
+              <Button onClick={() => setShowMobileFilters(false)} className="w-full btn-primary">
+                Apply Filters
+              </Button>
+              <Button onClick={clearFilters} variant="outline" className="w-full border-gray-200">
+                Reset All
+              </Button>
+            </div>
           </div>
         </SheetContent>
       </Sheet>
